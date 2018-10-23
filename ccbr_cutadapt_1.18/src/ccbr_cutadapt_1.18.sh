@@ -24,7 +24,40 @@ main() {
     # recover the original filenames, you can use the output of "dx describe
     # "$variable" --name".
 
-    dx download "$InFq" -o InFq
+#    dx download "$InFq" -o InFq
+
+cd /
+(>&2 echo "DEBUG:Listing all files in root")
+(>&2 ls -larth)
+(>&2 echo "Done listing")
+
+
+mkdir -p /data/
+cp /TruSeq_and_nextera_adapters.consolidated.fa /data/
+cd /data
+(>&2 echo "DEBUG:Listing all files in data")
+(>&2 ls -larth)
+(>&2 echo "Done listing")
+
+(>&2 echo "Downloading")
+
+infq=$(dx describe "$InFq" --name)
+dx download "$InFq" -o $infq
+
+(>&2 echo "DEBUG:Listing all files in data")
+(>&2 ls -larth)
+(>&2 echo "Done listing")
+
+outfilename=`echo $infq|sed "s/.fastq.gz/.trimmed.fastq.gz/g"`
+
+
+dx-docker run -v /data/:/data kopardev/ccbr_cutadapt_1.18 cutadapt --nextseq-trim=2 --trim-n -n 5 -O 5 -q 10,10 -m 35 -b file:/data/TruSeq_and_nextera_adapters.consolidated.fa -j 16 -o $outfilename $infq
+
+(>&2 echo "DEBUG:Listing all files in data")
+(>&2 ls -larth)
+(>&2 echo "Done listing")
+
+(>&2 echo "Uploading")
 
     # Fill in your application code here.
     #
@@ -46,7 +79,7 @@ main() {
     # but you can change that behavior to suit your needs.  Run "dx upload -h"
     # to see more options to set metadata.
 
-    OutFq=$(dx upload OutFq --brief)
+    OutFq=$(dx upload /data/$outfilename --brief)
 
     # The following line(s) use the utility dx-jobutil-add-output to format and
     # add output variables to your job's output as appropriate for the output

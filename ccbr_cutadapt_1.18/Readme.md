@@ -1,7 +1,7 @@
 <!-- dx-header -->
-# CCBR CUTADAPT (DNAnexus Platform App)
+# CCBR_CutAdapt_1.18 (DNAnexus Platform App)
 
-ccbr_cutadapt_1.18
+Uses ccbr pipeliner adapter fasta to trim fastq files using cutadapt
 
 This is the source code for an app that runs on the DNAnexus Platform.
 For more information about how to run or modify it, see

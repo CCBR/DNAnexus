@@ -1,12 +1,13 @@
 {
   "name": "ccbr_cutadapt_1.18",
-  "title": "CCBR CUTADAPT",
-  "summary": "ccbr_cutadapt_1.18",
+  "title": "CCBR_CutAdapt_1.18",
+  "summary": "Uses ccbr pipeliner adapter fasta to trim fastq files using cutadapt",
   "dxapi": "1.0.0",
   "version": "0.0.1",
   "inputSpec": [
     {
       "name": "InFq",
+      "label": "Input Fastq gzipped file",
       "class": "file",
       "optional": false,
       "patterns": [
@@ -18,6 +19,7 @@
   "outputSpec": [
     {
       "name": "OutFq",
+      "label": "Output Fastq gzipped file",
       "class": "file",
       "patterns": [
         "*"
@@ -37,7 +39,10 @@
     "file": "src/ccbr_cutadapt_1.18.sh"
   },
   "access": {
-    "project": "CONTRIBUTE"
+    "project": "CONTRIBUTE",
+    "network": [
+      "*"
+    ]
   },
   "regionalOptions": {
     "azure:westus": {
