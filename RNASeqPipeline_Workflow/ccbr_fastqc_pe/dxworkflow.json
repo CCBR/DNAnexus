@@ -1,0 +1,127 @@
+{
+	"name": "ccbr_fastqc_pe",
+	"title": "ccbr_fastqc_pe",
+	"summary": "",
+	"version": "0.0.2",
+	"inputs": 
+	[
+		{
+			"name": "Read1",
+			"class": "file",
+			"optional": false,
+			"patterns": 
+			[
+				"*.fastq.gz",
+				"*.fastq"
+			],
+			"help": ""
+		},
+		{
+			"name": "Read2",
+			"class": "file",
+			"optional": false,
+			"patterns": 
+			[
+				"*.fastq.gz",
+				"*.fastq"
+			],
+			"help": ""
+		}
+	],
+	"stages": 
+	[
+		{
+			"id": "Read1_fastqc",
+			"executable": "applet-FQ3XQ8Q0xx3yxByq9XYb3154",
+			"input": 
+			{
+				"InFq": 
+				{
+					"$dnanexus_link": 
+					{
+						"workflowInputField": "Read1"
+					}
+				}
+			},
+			"systemRequirements": 
+			{  
+				"main": 
+				{                        
+					"instanceType": "mem1_ssd1_x16" 
+				}
+			}
+		},
+		{
+			"id": "Read2_fastqc",
+			"executable": "applet-FQ3XQ8Q0xx3yxByq9XYb3154",
+			"input": 
+			{
+				"InFq": 
+				{
+					"$dnanexus_link": 
+					{
+						"workflowInputField": "Read2"
+					}
+				}      
+			},
+			"systemRequirements": 
+			{  
+				"main": 
+				{                        
+					"instanceType": "mem1_ssd1_x16" 
+				}
+			}			
+		}
+	],
+	"outputs": 
+	[
+		{
+			"name": "Read1_OutHtml",
+			"class": "file",
+			"outputSource": 
+			{
+				"$dnanexus_link": 
+				{
+					"stage": "Read1_fastqc",
+					"outputField": "OutHtml"
+				}
+			}
+		},
+		{
+			"name": "Read1_OutTxt",
+			"class": "file",
+			"outputSource": 
+			{
+				"$dnanexus_link": 
+				{
+					"stage": "Read1_fastqc",
+					"outputField": "OutTxt"
+				}
+			}
+		},      
+		{
+			"name": "Read2_OutHtml",
+			"class": "file",
+			"outputSource": 
+			{
+				"$dnanexus_link": 
+				{
+					"stage": "Read2_fastqc",
+					"outputField": "OutHtml"
+				}
+			}
+		},
+		{
+			"name": "Read2_OutTxt",
+			"class": "file",
+			"outputSource": 
+			{
+				"$dnanexus_link": 
+				{
+					"stage": "Read2_fastqc",
+					"outputField": "OutTxt"
+				}
+			}
+		} 
+	]
+}

@@ -1,0 +1,16 @@
+dx run ccbr_star_p2 \
+-iRawFq=/Testing/I1.R1.fastq.gz \
+-iRawFq=/Testing/I1.R2.fastq.gz \
+-iRawFq=/Testing/T1.R1.fastq.gz \
+-iRawFq=/Testing/T1.R2.fastq.gz \
+-iTrimmedFq=/Testing/WFpar1_test1/trim/I1.R1.trimmed.fastq.gz \
+-iTrimmedFq=/Testing/WFpar1_test1/trim/I1.R2.trimmed.fastq.gz \
+-iTrimmedFq=/Testing/WFpar1_test1/trim/T1.R1.trimmed.fastq.gz \
+-iTrimmedFq=/Testing/WFpar1_test1/trim/T1.R2.trimmed.fastq.gz \
+-iTrimmedFastqcTxt=/Testing/WFpar1_test1/QC/I1.R1.trimmed_fastqc_data.txt \
+-iTrimmedFastqcTxt=/Testing/WFpar1_test1/QC/I1.R2.trimmed_fastqc_data.txt \
+-iTrimmedFastqcTxt=/Testing/WFpar1_test1/QC/T1.R1.trimmed_fastqc_data.txt \
+-iTrimmedFastqcTxt=/Testing/WFpar1_test1/QC/T1.R2.trimmed_fastqc_data.txt \
+-iGenome="hg19" \
+-iUniqSJOutTab=/Testing/ccbr_star_p1_test1/uniq.SJ.out.tab \
+--destination=/Testing/ccbr_star_p2_test3

@@ -1,0 +1,64 @@
+{
+  "name": "ccbr_create_bowtie2_index",
+  "title": "ccbr_create_bowtie2_index",
+  "summary": "Create tar ball with bowtie2 index from a Fasta file",
+  "dxapi": "1.0.0",
+  "version": "0.0.1",
+  "inputSpec": [
+    {
+      "name": "InFa",
+      "label": "Input fasta file",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*.fasta",
+        "*.fa"
+      ],
+      "help": ""
+    },
+    {
+      "name": "Prefix",
+      "label": "Prefix for the index",
+      "class": "string",
+      "optional": false,
+      "help": ""
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "OutTar",
+      "label": "Output tarball with bowtie2 index",
+      "class": "file",
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    }
+  ],
+  "runSpec": {
+    "timeoutPolicy": {
+      "*": {
+        "hours": 48
+      }
+    },
+    "interpreter": "bash",
+    "release": "14.04",
+    "distribution": "Ubuntu",
+    "file": "src/ccbr_create_bowtie2_index.sh"
+  },
+  "access": {
+    "project": "CONTRIBUTE",
+    "network": [
+      "*"
+    ]
+  },
+  "regionalOptions": {
+    "aws:us-east-1": {
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem2_ssd1_x2"
+        }
+      }
+    }
+  }
+}
