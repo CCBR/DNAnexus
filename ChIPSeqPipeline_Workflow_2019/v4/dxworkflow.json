@@ -42,6 +42,24 @@
       }
     },
     {
+      "id": "dedup_input",
+      "executable": "app-ccbr_macs_filterdup/0.0.1",
+      "folder": "bam",
+      "input": {
+        "Bam": {
+          "$dnanexus_link": {
+            "outputField": "SortedQ5Bam",
+            "stage": "align_input"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem2_ssd1_x4"
+        }
+      }
+    },
+    {
       "id": "align_treatment",
       "executable": "app-ccbr_bwa_align_se/0.0.3",
       "folder": "bam",
@@ -68,6 +86,24 @@
       "systemRequirements": {
         "*": {
           "instanceType": "mem1_ssd1_x32"
+        }
+      }
+    },
+    {
+      "id": "dedup_treatment",
+      "executable": "app-ccbr_macs_filterdup/0.0.1",
+      "folder": "bam",
+      "input": {
+        "Bam": {
+          "$dnanexus_link": {
+            "outputField": "SortedQ5Bam",
+            "stage": "align_treatment"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem2_ssd1_x4"
         }
       }
     }
