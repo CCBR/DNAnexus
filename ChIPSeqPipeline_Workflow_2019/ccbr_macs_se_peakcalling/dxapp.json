@@ -1,0 +1,90 @@
+{
+  "name": "ccbr_macs_se_peakcalling",
+  "title": "CCBR MACS SE PEAKCALLING",
+  "summary": "Peakcalling from macs filterdup tagalign files",
+  "dxapi": "1.0.0",
+  "inputSpec": [
+    {
+      "name": "TreatmentTagAlign",
+      "label": "Treatment TagAlign",
+      "help": "",
+      "class": "file",
+      "patterns": ["*"],
+      "optional": false
+    },
+    {
+      "name": "TreatmentPPQT",
+      "label": "Treatment PPQT file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*"],
+      "optional": false
+    },
+    {
+      "name": "InputTagAlign",
+      "label": "Input or IgG TagAlign",
+      "help": "",
+      "class": "file",
+      "patterns": ["*"],
+      "optional": false
+    },
+    {
+      "name": "BwaIndex",
+      "label": "BWA reference targz file for extracting genome name (mm9/10, hg19/38)",
+      "help": "",
+      "class": "file",
+      "patterns": ["*"],
+      "optional": false
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "NarrowPeak",
+      "label": "NarrowPeak output file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*"]
+    },
+    {
+      "name": "Xls",
+      "label": "macs xls output file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*"]
+    },
+    {
+      "name": "Bed",
+      "label": "macs bed output file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*"]
+    }
+  ],
+  "runSpec": {
+    "file": "src/code.sh",
+    "release": "14.04",
+    "interpreter": "bash",
+    "timeoutPolicy": {
+      "*": {
+        "hours": 48
+      }
+    },
+    "distribution": "Ubuntu"
+  },
+  "access": {
+    "project": "CONTRIBUTE",
+    "network": [
+      "*"
+    ]
+  },
+  "ignoreReuse": false,
+  "regionalOptions": {
+    "aws:us-east-1": {
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x2"
+        }
+      }
+    }
+  }
+}

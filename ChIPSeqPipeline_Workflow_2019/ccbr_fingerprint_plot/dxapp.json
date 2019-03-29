@@ -1,0 +1,60 @@
+{
+  "name": "ccbr_fingerprint_plot",
+  "title": "CCBR_FINGERPRINT_PLOT",
+  "summary": "Deeptools fingerprint plot for bams (1 treatment 1 input)",
+  "dxapi": "1.0.0",
+  "inputSpec": [
+    {
+      "name": "TreatmentBam",
+      "label": "ChIP treatment bam file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.bam"],
+      "optional": false
+    },
+    {
+      "name": "InputBam",
+      "label": "Input or IgG bam file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.bam"],
+      "optional": false
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "OutPdf",
+      "label": "Output pdf file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.pdf"]
+    }
+  ],
+  "runSpec": {
+    "file": "src/code.sh",
+    "release": "14.04",
+    "interpreter": "bash",
+    "timeoutPolicy": {
+      "*": {
+        "hours": 48
+      }
+    },
+    "distribution": "Ubuntu"
+  },
+  "access": {
+    "project": "CONTRIBUTE",
+    "network": [
+      "*"
+    ]
+  },
+  "ignoreReuse": false,
+  "regionalOptions": {
+    "aws:us-east-1": {
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x16"
+        }
+      }
+    }
+  }
+}

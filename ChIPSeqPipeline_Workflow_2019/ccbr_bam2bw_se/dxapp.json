@@ -1,0 +1,83 @@
+{
+  "name": "ccbr_bam2bw_se",
+  "title": "CCBR_BAM2BIGWIG_SE",
+  "summary": "Normalize SE bam files (1 treatment 1 input) using deeptools RPGC method to generate bigwig files",
+  "dxapi": "1.0.0",
+  "inputSpec": [
+    {
+      "name": "BwaIndex",
+      "label": "BWA reference targz file for guessing effective genome size (mm9/10, hg19/38)",
+      "help": "",
+      "class": "file",
+      "patterns": ["*"],
+      "optional": false
+    },
+    {
+      "name": "TreatmentBam",
+      "label": "ChIP treatment bam file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*"],
+      "optional": false
+    },
+    {
+      "name": "TreatmentPPQT",
+      "label": "ChIP treatment ppqt file for extension size",
+      "help": "",
+      "class": "file",
+      "patterns": ["*"],
+      "optional": false
+    },
+    {
+      "name": "InputBam",
+      "label": "Input or IgG bam file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*"],
+      "optional": false
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "TreatmentBigwig",
+      "label": "Output treatment bigwig file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*"]
+    },
+    {
+      "name": "InputBigwig",
+      "label": "Output Input/IgG bigwig file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*"]
+    }
+  ],
+  "runSpec": {
+    "file": "src/code.sh",
+    "release": "14.04",
+    "interpreter": "bash",
+    "timeoutPolicy": {
+      "*": {
+        "hours": 48
+      }
+    },
+    "distribution": "Ubuntu"
+  },
+  "access": {
+    "project": "CONTRIBUTE",
+    "network": [
+      "*"
+    ]
+  },
+  "ignoreReuse": false,
+  "regionalOptions": {
+    "aws:us-east-1": {
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x32"
+        }
+      }
+    }
+  }
+}
