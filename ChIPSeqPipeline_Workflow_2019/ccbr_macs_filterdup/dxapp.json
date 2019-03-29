@@ -1,8 +1,9 @@
 {
   "name": "ccbr_macs_filterdup",
-  "title": "CCBR_MACS2_filterdup",
-  "summary": "CCBR deduplications of SE mapped bam file using macs filterdup",
+  "title": "CCBR MACS2 Filter Duplicates",
+  "summary": "Remove duplicates in SE mapped bam file using macs filterdup",
   "dxapi": "1.0.0",
+  "version": "0.0.1",
   "inputSpec": [
     {
       "name": "Bam",
@@ -19,7 +20,7 @@
       "label": "BED6 dedup file",
       "help": "",
       "class": "file",
-      "patterns": ["*.tagAlign"]
+      "patterns": ["*.tagAlign.gz"]
     },
     {
       "name": "OutBam",
@@ -27,12 +28,24 @@
       "help": "",
       "class": "file",
       "patterns": ["*.bam"]
+    },
+    {
+      "name": "SarTxt",
+      "label": "Sar output txt file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.txt"]
     }
   ],
   "runSpec": {
     "file": "src/code.sh",
     "release": "14.04",
     "interpreter": "bash",
+    "execDepends" :
+    [
+      {"name" : "sysstat"},
+      {"name" : "pigz"}
+    ],
     "timeoutPolicy": {
       "*": {
         "hours": 48

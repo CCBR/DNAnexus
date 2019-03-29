@@ -26,6 +26,11 @@ main() {
 
 mkdir -p /data
 cd /data
+cpus=`nproc`
+
+sarfile="/data/${DX_JOB_ID}_sar.txt"
+sar 5 > $sarfile &
+SAR_PID=$!
 
 bam=$(dx describe "$Bam" --name)
 dx download "$Bam" -o $bam
@@ -36,27 +41,30 @@ outbamfile=`echo $bam|sed "s/.bam/.DD.bam/g"`
 dx-docker run -v /data/:/data nciccbr/ccbr_macs2_2.1.1.20160309:v032219 macs2 filterdup -i $bam -o TmpTagAlign
 awk -F"\t" -v OFS="\t" '{if ($2>0 && $3>0) {print}}' TmpTagAlign > TmpTagAlign2
 
-(>&2 echo "DEBUG:Listing all files in data")
-(>&2 ls -larth)
-(>&2 echo "Done listing")
+# (>&2 echo "DEBUG:Listing all files in data")
+# (>&2 ls -larth)
+# (>&2 echo "Done listing")
 
-dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.9:v032219 samtools view -H $bam|grep "^@SQ"|cut -f2,3|sed "s/SN://"|sed "s/LN://g" > GenomeFile
+dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.7:v032619 samtools view -@ $cpus -H $bam|grep "^@SQ"|cut -f2,3|sed "s/SN://"|sed "s/LN://g" > GenomeFile
 awk -F"\t" -v OFS="\t" '{print $1,1,$2}' GenomeFile |sort -k1,1 -k2,2n > GenomeFileBed
 
-(>&2 echo "DEBUG:Listing all files in data")
-(>&2 ls -larth)
-(>&2 echo "Done listing")
+# (>&2 echo "DEBUG:Listing all files in data")
+# (>&2 ls -larth)
+# (>&2 echo "Done listing")
 
 dx-docker run -v /data/:/data nciccbr/ccbr_bedtools_2.21.0:v032219 bedtools intersect -wa -f 1.0 -a TmpTagAlign2 -b GenomeFileBed > TagAlign
 
 dx-docker run -v /data/:/data nciccbr/ccbr_bedtools_2.21.0:v032219 bedtools bedtobam -i TagAlign -g GenomeFile > OutBam
 
-(>&2 echo "DEBUG:Listing all files in data")
-(>&2 ls -larth)
-(>&2 echo "Done listing")
+# (>&2 echo "DEBUG:Listing all files in data")
+# (>&2 ls -larth)
+# (>&2 echo "Done listing")
+
 
 mv TagAlign $tagalignfile
 mv OutBam $outbamfile
+
+pigz -p $cpus $tagalignfile
 
     # Fill in your application code here.
     #
@@ -78,7 +86,7 @@ mv OutBam $outbamfile
     # but you can change that behavior to suit your needs.  Run "dx upload -h"
     # to see more options to set metadata.
 
-    TagAlign=$(dx upload /data/$tagalignfile --brief)
+    TagAlign=$(dx upload /data/${tagalignfile}.gz --brief)
     OutBam=$(dx upload /data/$outbamfile --brief)
 
     # The following line(s) use the utility dx-jobutil-add-output to format and
@@ -88,4 +96,8 @@ mv OutBam $outbamfile
 
     dx-jobutil-add-output TagAlign "$TagAlign" --class=file
     dx-jobutil-add-output OutBam "$OutBam" --class=file
+
+    kill -9 $SAR_PID
+    SarTxt=$(dx upload $sarfile --brief)
+    dx-jobutil-add-output SarTxt "$SarTxt" --class=file
 }
