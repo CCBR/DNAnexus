@@ -27,42 +27,23 @@ main() {
 #    dx download "$InFq" -o InFq
 
 
-cd /
-(>&2 echo "DEBUG:Listing all files in root")
-(>&2 ls -larth)
-(>&2 echo "Done listing")
-
 
 mkdir -p /data/
 cp /TruSeq_and_nextera_adapters.consolidated.fa /data/
 cd /data
-(>&2 echo "DEBUG:Listing all files in data")
-(>&2 ls -larth)
-(>&2 echo "Done listing")
 
 sarfile="/data/${DX_JOB_ID}_sar.txt"
 sar 5 > $sarfile &
 SAR_PID=$!
 
-(>&2 echo "Downloading")
-
 infq=$(dx describe "$InFq" --name)
 dx download "$InFq" -o $infq
 
-(>&2 echo "DEBUG:Listing all files in data")
-(>&2 ls -larth)
-(>&2 echo "Done listing")
-
-outfilename=`echo $infq|sed "s/.fastq.gz/.trimmed.fastq.gz/g"`
+outfilename=`echo $infq|sed "s/.fastq.gz/.trim.fastq.gz/g"`
 
 ncpus=`nproc`
-dx-docker run -v /data/:/data nciccbr/ccbr_cutadapt_1.18:v032619 cutadapt --nextseq-trim=2 --trim-n -n 5 -O 5 -q 10,10 -m 35 -b file:/data/TruSeq_and_nextera_adapters.consolidated.fa -j $ncpus -o $outfilename $infq
 
-(>&2 echo "DEBUG:Listing all files in data")
-(>&2 ls -larth)
-(>&2 echo "Done listing")
-
-(>&2 echo "Uploading")
+dx-docker run -v /data/:/data/ nciccbr/ccbr_cutadapt:v1.0.0 /opt/ccbr_cutadapt_se.sh $infq
 
     # Fill in your application code here.
     #
@@ -84,10 +65,8 @@ dx-docker run -v /data/:/data nciccbr/ccbr_cutadapt_1.18:v032619 cutadapt --next
     # but you can change that behavior to suit your needs.  Run "dx upload -h"
     # to see more options to set metadata.
 
-kill -9 $SAR_PID
 
     OutFq=$(dx upload /data/$outfilename --brief)
-    SarTxt=$(dx upload $sarfile --brief)
 
     # The following line(s) use the utility dx-jobutil-add-output to format and
     # add output variables to your job's output as appropriate for the output
@@ -95,6 +74,9 @@ kill -9 $SAR_PID
     # does.
 
     dx-jobutil-add-output OutFq "$OutFq" --class=file
+    
+    kill -9 $SAR_PID
+    SarTxt=$(dx upload $sarfile --brief)
     dx-jobutil-add-output SarTxt "$SarTxt" --class=file
 
 

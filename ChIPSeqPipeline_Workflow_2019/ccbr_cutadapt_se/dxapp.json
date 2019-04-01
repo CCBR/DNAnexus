@@ -3,7 +3,7 @@
   "title": "CCBR CutAdapt SE",
   "summary": "Uses ccbr pipeliner adapter fasta to trim fastq files using cutadapt",
   "dxapi": "1.0.0",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "authorizedUsers": [
     "user-kopardevn",
     "user-kuynsa",
