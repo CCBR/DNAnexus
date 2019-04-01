@@ -1,15 +1,30 @@
 {
   "name": "ccbr_bam2bw_se",
-  "title": "CCBR_BAM2BIGWIG_SE",
+  "title": "CCBR BAM2BIGWIG SE",
   "summary": "Normalize SE bam files (1 treatment 1 input) using deeptools RPGC method to generate bigwig files",
   "dxapi": "1.0.0",
+  "version": "0.0.1",
+  "authorizedUsers": [
+    "user-kopardevn",
+    "user-kuynsa",
+    "user-annao",
+    "user-cappellacci",
+    "user-pcf"  
+  ],
   "inputSpec": [
     {
-      "name": "BwaIndex",
-      "label": "BWA reference targz file for guessing effective genome size (mm9/10, hg19/38)",
+      "name": "Genome2Resources",
+      "label": "Genome2Resources TSV lookup table",
       "help": "",
       "class": "file",
-      "patterns": ["*"],
+      "patterns": ["*.tsv"],
+      "optional": false
+    },
+    {
+      "name": "Genome",
+      "label": "mm9/10, hg19/38",
+      "help": "",
+      "class": "string",
       "optional": false
     },
     {
@@ -17,7 +32,7 @@
       "label": "ChIP treatment bam file",
       "help": "",
       "class": "file",
-      "patterns": ["*"],
+      "patterns": ["*.bam"],
       "optional": false
     },
     {
@@ -25,7 +40,7 @@
       "label": "ChIP treatment ppqt file for extension size",
       "help": "",
       "class": "file",
-      "patterns": ["*"],
+      "patterns": ["*.ppqt"],
       "optional": false
     },
     {
@@ -33,7 +48,7 @@
       "label": "Input or IgG bam file",
       "help": "",
       "class": "file",
-      "patterns": ["*"],
+      "patterns": ["*.bam"],
       "optional": false
     }
   ],
@@ -43,20 +58,38 @@
       "label": "Output treatment bigwig file",
       "help": "",
       "class": "file",
-      "patterns": ["*"]
+      "patterns": ["*.bw"]
     },
     {
       "name": "InputBigwig",
       "label": "Output Input/IgG bigwig file",
       "help": "",
       "class": "file",
-      "patterns": ["*"]
+      "patterns": ["*.bw"]
+    },
+    {
+      "name": "InputNormBigwig",
+      "label": "Output Treatment minus Input/IgG bigwig file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.bw"]
+    },
+    {
+      "name": "SarTxt",
+      "label": "Sar output txt file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.txt"]
     }
   ],
   "runSpec": {
     "file": "src/code.sh",
     "release": "14.04",
     "interpreter": "bash",
+    "execDepends" :
+    [
+      {"name" : "sysstat"}
+    ],
     "timeoutPolicy": {
       "*": {
         "hours": 48

@@ -26,6 +26,11 @@ main() {
 
 mkdir -p /data
 cd /data
+cpus=`nproc`
+
+sarfile="/data/${DX_JOB_ID}_sar.txt"
+sar 5 > $sarfile &
+SAR_PID=$!
 
 t_tagalign=$(dx describe "$InBam" --name)
 dx download "$InBam" -o $t_tagalign
@@ -69,4 +74,8 @@ dx-docker run -v /data/:/data nciccbr/ccbr_spp_1.14:v032219 run_spp.R -c=$t_taga
 
     dx-jobutil-add-output OutPdf "$OutPdf" --class=file
     dx-jobutil-add-output OutPpqt "$OutPpqt" --class=file
+
+    kill -9 $SAR_PID
+    SarTxt=$(dx upload $sarfile --brief)
+    dx-jobutil-add-output SarTxt "$SarTxt" --class=file
 }
