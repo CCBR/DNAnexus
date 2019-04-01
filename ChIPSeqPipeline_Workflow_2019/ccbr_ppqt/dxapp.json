@@ -17,7 +17,7 @@
       "label": "Input bam or tagAlign file",
       "help": "",
       "class": "file",
-      "patterns": ["*.bam","*.tagAlign"],
+      "patterns": ["*.bam","*.tagAlign.gz"],
       "optional": false
     }
   ],
