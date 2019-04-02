@@ -20,7 +20,7 @@ main() {
     echo "Value of TreatmentTagAlign: '$TreatmentTagAlign'"
     echo "Value of TreatmentPPQT: '$TreatmentPPQT'"
     echo "Value of InputTagAlign: '$InputTagAlign'"
-    echo "Value of BwaIndex: '$BwaIndex'"
+    echo "Value of Genome: '$Genome'"
 
     # The following line(s) use the dx command-line tool to download your file
     # inputs to the local file system using variable names for the filenames. To
@@ -29,15 +29,16 @@ main() {
 
 mkdir -p /data
 cd /data
+cpus=`nproc`
 
-reftargz=$(dx describe "$BwaIndex" --name)
-ref=${reftargz%%.*}
-ref=`echo $ref|awk '{print substr($1,1,2)}'`
-if [ "$ref" == "hg" ]; then
-genome="hs"
-elif [ "$ref" == "mm" ]; then
-genome="mm"
-fi
+sarfile="/data/${DX_JOB_ID}_sar.txt"
+sar 5 > $sarfile &
+SAR_PID=$!
+
+genome2resources=$(dx describe "$Genome2Resources" --name)
+dx download "$Genome2Resources" -o $genome2resources
+
+genomesize=$(python /get_fileid.py $Genome 'effectiveSize' $genome2resources)
 
 t_tagalign=$(dx describe "$TreatmentTagAlign" --name)
 dx download "$TreatmentTagAlign" -o $t_tagalign
@@ -48,15 +49,16 @@ dx download "$InputTagAlign" -o $i_tagalign
 
 outname=${t_tagalign}_vs_${i_tagalign}
 narrowPeak=${outname}_peaks.narrowPeak
-xls=${outname}_peaks.xls
-bed=${outname}_summits.bed
+summitsbed=${outname}_summits.bed
+broadPeak=${outname}_peaks.broadPeak
+gappedPeak=${outname}_peaks.gappedPeak
 
-#dx-docker run -v /data/:/data kopardev/ccbr_spp_1.14 run_spp.R -c=$t_tagalign -out=ppqt
+#call narrow peaks
+dx-docker run -v /data/:/data nciccbr/ccbr_macs:v0.0.1 ccbr_macs_callpeak_se.bash --treatment $t_tagalign --input $i_tagalign --outprefix $outname --genomesize $genomesize --treatmentppqt $t_ppqt 
 
-extsize=`cat $t_ppqt|awk -F"\t" '{print $3}'|awk -F"," '{print $1}'`
-tagsize=`cat $t_ppqt|awk -F"\t" '{print $5}'|awk -F"," '{print $1}'`
+#call broad peaks
+dx-docker run -v /data/:/data nciccbr/ccbr_macs:v0.0.1 ccbr_macs_callpeak_se.bash --treatment $t_tagalign --input $i_tagalign --outprefix $outname --genomesize $genomesize --treatmentppqt $t_ppqt --broad
 
-dx-docker run -v /data/:/data nciccbr/ccbr_macs2_2.1.1.20160309:v032219 macs2 callpeak -t $t_tagalign -c $i_tagalign -n $outname --nomodel --extsize $extsize --tsize $tagsize -q 0.01 -f BED -g $genome --keep-dup=auto
 
     # Fill in your application code here.
     #
@@ -79,8 +81,9 @@ dx-docker run -v /data/:/data nciccbr/ccbr_macs2_2.1.1.20160309:v032219 macs2 ca
     # to see more options to set metadata.
 
     NarrowPeak=$(dx upload /data/$narrowPeak --brief)
-    Xls=$(dx upload /data/$xls --brief)
-    Bed=$(dx upload /data/$bed --brief)
+    SummitsBed=$(dx upload /data/$summitsbed --brief)
+    BroadPeak=$(dx upload /data/$broadPeak --brief)
+    GappedPeak=$(dx upload /data/$gappedPeak --brief)
 
     # The following line(s) use the utility dx-jobutil-add-output to format and
     # add output variables to your job's output as appropriate for the output
@@ -88,6 +91,11 @@ dx-docker run -v /data/:/data nciccbr/ccbr_macs2_2.1.1.20160309:v032219 macs2 ca
     # does.
 
     dx-jobutil-add-output NarrowPeak "$NarrowPeak" --class=file
-    dx-jobutil-add-output Xls "$Xls" --class=file
-    dx-jobutil-add-output Bed "$Bed" --class=file
+    dx-jobutil-add-output SummitsBed "$SummitsBed" --class=file
+    dx-jobutil-add-output BroadPeak "$BroadPeak" --class=file
+    dx-jobutil-add-output GappedPeak "$GappedPeak" --class=file
+
+    kill -9 $SAR_PID
+    SarTxt=$(dx upload $sarfile --brief)
+    dx-jobutil-add-output SarTxt "$SarTxt" --class=file
 }

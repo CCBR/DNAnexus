@@ -1,15 +1,38 @@
 {
   "name": "ccbr_macs_se_peakcalling",
   "title": "CCBR MACS SE PEAKCALLING",
-  "summary": "Peakcalling from macs filterdup tagalign files",
+  "summary": "Peakcalling using macs (narrow and broad)",
   "dxapi": "1.0.0",
+  "version": "0.1.0",
+  "authorizedUsers": [
+    "user-kopardevn",
+    "user-kuynsa",
+    "user-annao",
+    "user-cappellacci",
+    "user-pcf"  
+  ],
   "inputSpec": [
+    {
+      "name": "Genome2Resources",
+      "label": "Genome2Resources TSV lookup table",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.tsv"],
+      "optional": false
+    },
+    {
+      "name": "Genome",
+      "label": "mm10 or hg19 or hg38 etc.",
+      "help": "",
+      "class": "string",
+      "optional": false
+    },
     {
       "name": "TreatmentTagAlign",
       "label": "Treatment TagAlign",
       "help": "",
       "class": "file",
-      "patterns": ["*"],
+      "patterns": ["*.tagAlign.gz"],
       "optional": false
     },
     {
@@ -17,7 +40,7 @@
       "label": "Treatment PPQT file",
       "help": "",
       "class": "file",
-      "patterns": ["*"],
+      "patterns": ["*.ppqt"],
       "optional": false
     },
     {
@@ -25,15 +48,7 @@
       "label": "Input or IgG TagAlign",
       "help": "",
       "class": "file",
-      "patterns": ["*"],
-      "optional": false
-    },
-    {
-      "name": "BwaIndex",
-      "label": "BWA reference targz file for extracting genome name (mm9/10, hg19/38)",
-      "help": "",
-      "class": "file",
-      "patterns": ["*"],
+      "patterns": ["*.tagAlign.gz"],
       "optional": false
     }
   ],
@@ -43,27 +58,45 @@
       "label": "NarrowPeak output file",
       "help": "",
       "class": "file",
-      "patterns": ["*"]
+      "patterns": ["*.narrowPeak"]
     },
     {
-      "name": "Xls",
-      "label": "macs xls output file",
+      "name": "BroadPeak",
+      "label": "BroadPeak output file",
       "help": "",
       "class": "file",
-      "patterns": ["*"]
+      "patterns": ["*.broadPeak"]
     },
     {
-      "name": "Bed",
-      "label": "macs bed output file",
+      "name": "GappedPeak",
+      "label": "NarrowPeak output file",
       "help": "",
       "class": "file",
-      "patterns": ["*"]
+      "patterns": ["*.gappedPeak"]
+    },
+    {
+      "name": "SummitsBed",
+      "label": "macs summits bed output file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.bed"]
+    },
+    {
+      "name": "SarTxt",
+      "label": "Sar output txt file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.txt"]
     }
   ],
   "runSpec": {
     "file": "src/code.sh",
     "release": "14.04",
     "interpreter": "bash",
+    "execDepends" :
+    [
+      {"name" : "sysstat"}
+    ],
     "timeoutPolicy": {
       "*": {
         "hours": 48
