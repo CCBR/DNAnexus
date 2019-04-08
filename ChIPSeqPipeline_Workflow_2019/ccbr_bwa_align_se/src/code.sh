@@ -65,33 +65,7 @@ sortedq5bambaifile=${basefilename}.sorted.Q5.bam.bai
 sortedbamflagstatfile=${sortedbamfile}.flagstat
 sortedq5bamflagstatfile=${sortedq5bamfile}.flagstat
 
-dx-docker run -v /data/:/data nciccbr/ccbr_bwa_0.7.17-r1188:v032219 bwa mem -t $cpus ${Genome}_blacklist $infq | dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.7:v032619 samtools view -@ $cpus -f4 -b -o notAlignedToBlacklist.bam
-
-dx-docker run -v /data/:/data nciccbr/ccbr_bedtools_2.21.0:v032219 bedtools bamtofastq -i notAlignedToBlacklist.bam -fq notAlignedToBlacklist.fastq
-
-(>&2 echo "DEBUG:Listing all files in data")
-(>&2 ls -larth)
-(>&2 wc -l notAlignedToBlacklist.fastq)
-(>&2 echo "Done listing")
-
-# gzip notAlignedToBlacklist.fastq
-
-# (>&2 ls -larth)
-# (>&2 echo "dx-docker run -v /data/:/data nciccbr/ccbr_bwa_0.7.17-r1188:v032219 bwa mem -t $cpus $Genome notAlignedToBlacklist.fastq.gz > $bamfile")
-
-dx-docker run -v /data/:/data nciccbr/ccbr_bwa_0.7.17-r1188:v032219 bwa mem -t $cpus $Genome notAlignedToBlacklist.fastq > $bamfile
-
-dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.7:v032619 samtools sort -@ $cpus -o $sortedbamfile $bamfile
-
-dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.7:v032619 samtools index $sortedbamfile
-
-dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.7:v032619 samtools view -@ $cpus -b -q 6 $sortedbamfile -o $sortedq5bamfile
-
-dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.7:v032619 samtools index $sortedq5bamfile
-
-dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.7:v032619 samtools flagstat $sortedbamfile > $sortedbamflagstatfile
-
-dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.7:v032619 samtools flagstat $sortedq5bamfile > $sortedq5bamflagstatfile
+dx-docker run -v /data/:/data nciccbr/ccbr_bwa:v0.0.1 ccbr_bwa_chipseq_align_se.bash --genome $Genome --infastq $infq
 
     # Fill in your application code here.
     #
