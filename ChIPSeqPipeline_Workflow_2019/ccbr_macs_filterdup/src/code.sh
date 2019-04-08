@@ -34,37 +34,14 @@ SAR_PID=$!
 
 bam=$(dx describe "$Bam" --name)
 dx download "$Bam" -o $bam
+genome2resources=$(dx describe "$Genome2Resources" --name)
+dx download "$Genome2Resources" -o $genome2resources
+genomesize=$(python /get_fileid.py $Genome 'effectiveSize' $genome2resources)
 
 tagalignfile=`echo $bam|sed "s/.bam/.DD.tagAlign/g"`
 outbamfile=`echo $bam|sed "s/.bam/.DD.bam/g"`
 
-dx-docker run -v /data/:/data nciccbr/ccbr_macs2_2.1.1.20160309:v032219 macs2 filterdup -i $bam -o TmpTagAlign
-awk -F"\t" -v OFS="\t" '{if ($2>0 && $3>0) {print}}' TmpTagAlign > TmpTagAlign2
-
-# (>&2 echo "DEBUG:Listing all files in data")
-# (>&2 ls -larth)
-# (>&2 echo "Done listing")
-
-dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.7:v032619 samtools view -@ $cpus -H $bam|grep "^@SQ"|cut -f2,3|sed "s/SN://"|sed "s/LN://g" > GenomeFile
-awk -F"\t" -v OFS="\t" '{print $1,1,$2}' GenomeFile |sort -k1,1 -k2,2n > GenomeFileBed
-
-# (>&2 echo "DEBUG:Listing all files in data")
-# (>&2 ls -larth)
-# (>&2 echo "Done listing")
-
-dx-docker run -v /data/:/data nciccbr/ccbr_bedtools_2.21.0:v032219 bedtools intersect -wa -f 1.0 -a TmpTagAlign2 -b GenomeFileBed > TagAlign
-
-dx-docker run -v /data/:/data nciccbr/ccbr_bedtools_2.21.0:v032219 bedtools bedtobam -i TagAlign -g GenomeFile > OutBam
-
-# (>&2 echo "DEBUG:Listing all files in data")
-# (>&2 ls -larth)
-# (>&2 echo "Done listing")
-
-
-mv TagAlign $tagalignfile
-mv OutBam $outbamfile
-
-pigz -p $cpus $tagalignfile
+dx-docker run -v /data/:/data nciccbr/ccbr_macs:v0.0.2 ccbr_macs_filterdup_se.bash --bam $bam --genomesize $genomesize 
 
     # Fill in your application code here.
     #
