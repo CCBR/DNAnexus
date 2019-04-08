@@ -3,7 +3,7 @@
   "title": "CCBR MACS SE PEAKCALLING",
   "summary": "Peakcalling using macs (narrow and broad)",
   "dxapi": "1.0.0",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "authorizedUsers": [
     "user-kopardevn",
     "user-kuynsa",
@@ -61,8 +61,22 @@
       "patterns": ["*.narrowPeak"]
     },
     {
+      "name": "NarrowPeakBed",
+      "label": "NarrowPeak file in bed6 format",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.bed"]
+    },
+    {
       "name": "BroadPeak",
       "label": "BroadPeak output file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.broadPeak"]
+    },
+    {
+      "name": "BroadPeakBed",
+      "label": "BroadPeak file in bed6 format",
       "help": "",
       "class": "file",
       "patterns": ["*.broadPeak"]

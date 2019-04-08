@@ -49,15 +49,17 @@ dx download "$InputTagAlign" -o $i_tagalign
 
 outname=${t_tagalign}_vs_${i_tagalign}
 narrowPeak=${outname}_peaks.narrowPeak
+narrowPeakBed=${outname}_peaks.narrowPeak.bed
 summitsbed=${outname}_summits.bed
 broadPeak=${outname}_peaks.broadPeak
+broadPeakBed=${outname}_peaks.broadPeak.bed
 gappedPeak=${outname}_peaks.gappedPeak
 
 #call narrow peaks
-dx-docker run -v /data/:/data nciccbr/ccbr_macs:v0.0.1 ccbr_macs_callpeak_se.bash --treatment $t_tagalign --input $i_tagalign --outprefix $outname --genomesize $genomesize --treatmentppqt $t_ppqt 
+dx-docker run -v /data/:/data nciccbr/ccbr_macs:v0.0.3 ccbr_macs_callpeak_se.bash --treatment $t_tagalign --input $i_tagalign --outprefix $outname --genomesize $genomesize --treatmentppqt $t_ppqt 
 
 #call broad peaks
-dx-docker run -v /data/:/data nciccbr/ccbr_macs:v0.0.1 ccbr_macs_callpeak_se.bash --treatment $t_tagalign --input $i_tagalign --outprefix $outname --genomesize $genomesize --treatmentppqt $t_ppqt --broad
+dx-docker run -v /data/:/data nciccbr/ccbr_macs:v0.0.3 ccbr_macs_callpeak_se.bash --treatment $t_tagalign --input $i_tagalign --outprefix $outname --genomesize $genomesize --treatmentppqt $t_ppqt --broad
 
 
     # Fill in your application code here.
@@ -81,8 +83,10 @@ dx-docker run -v /data/:/data nciccbr/ccbr_macs:v0.0.1 ccbr_macs_callpeak_se.bas
     # to see more options to set metadata.
 
     NarrowPeak=$(dx upload /data/$narrowPeak --brief)
+    NarrowPeakBed=$(dx upload /data/$narrowPeakBed --brief)
     SummitsBed=$(dx upload /data/$summitsbed --brief)
     BroadPeak=$(dx upload /data/$broadPeak --brief)
+    BroadPeakBed=$(dx upload /data/$broadPeakBed --brief)
     GappedPeak=$(dx upload /data/$gappedPeak --brief)
 
     # The following line(s) use the utility dx-jobutil-add-output to format and
@@ -91,8 +95,10 @@ dx-docker run -v /data/:/data nciccbr/ccbr_macs:v0.0.1 ccbr_macs_callpeak_se.bas
     # does.
 
     dx-jobutil-add-output NarrowPeak "$NarrowPeak" --class=file
+    dx-jobutil-add-output NarrowPeakBed "$NarrowPeakBed" --class=file
     dx-jobutil-add-output SummitsBed "$SummitsBed" --class=file
     dx-jobutil-add-output BroadPeak "$BroadPeak" --class=file
+    dx-jobutil-add-output BroadPeakBed "$BroadPeakBed" --class=file
     dx-jobutil-add-output GappedPeak "$GappedPeak" --class=file
 
     kill -9 $SAR_PID
