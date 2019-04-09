@@ -1,0 +1,108 @@
+{
+  "name": "ccbr_chipseq_trim_align_dedup",
+  "title": "CCBR ChIPSeq TRIM_ALIGN_DEDUP",
+  "summary": "ccbr_chipseq_trim_align_dedup",
+  "version": "0.0.1",
+  "authorizedUsers": [
+    "user-kopardevn",
+    "user-kuynsa",
+    "user-annao",
+    "user-cappellacci",
+    "user-pcf"  
+  ],
+  "inputs": [
+    {
+      "name": "InputFastq",
+      "class": "file",
+      "patterns": ["*.fastq.gz"],
+      "optional": false    
+    },
+    {
+      "name": "Genome2Resources",
+      "class": "file",
+      "patterns": ["*.tsv"],
+      "optional": false    
+    },   
+    {
+      "name": "Genome",
+      "class": "string",
+      "patterns" : ["mm9", "mm10", "hg19", "hg38"],
+      "optional": false    
+    }  
+  ],
+  "stages": [
+    {
+      "id": "stage-TRIM",
+      "executable": "app-ccbr_cutadapt_se/0.1.0",
+      "folder": "trim",
+      "input": {
+        "InFq": {
+          "$dnanexus_link": {
+            "workflowInputField": "InputFastq"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x32"
+        }
+      }
+    },
+    {
+      "id": "stage-ALIGN",
+      "executable": "app-ccbr_bwa_align_se/0.1.0",
+      "folder": "bam",
+      "input": {
+        "InFq": {
+          "$dnanexus_link": {
+            "outputField": "OutFq",
+            "stage": "stage-TRIM"
+          }
+        },
+        "Genome": {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome"
+          }
+        },
+        "Genome2Resources": {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome2Resources"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x32"
+        }
+      }
+    },
+    {
+      "id": "stage-DEDUP",
+      "executable": "app-ccbr_macs_filterdup/0.1.0",
+      "folder":"bam",
+      "input": {
+        "Genome2Resources": {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome2Resources"
+          }
+        },
+        "Genome" : {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome"
+          }
+        },
+        "Bam": {
+          "$dnanexus_link": {
+            "outputField": "SortedQ5Bam",
+            "stage": "stage-ALIGN"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x4"
+        }
+      }
+    }
+  ]
+}
