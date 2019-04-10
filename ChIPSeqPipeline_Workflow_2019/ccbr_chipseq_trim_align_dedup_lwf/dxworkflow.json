@@ -104,5 +104,97 @@
         }
       }
     }
+  ],
+  "outputs": [
+    {
+      "name": "TrimmedFastq",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-TRIM",
+          "outputField": "OutFq"
+        }
+      }
+    },
+    {
+      "name": "SortedBam",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ALIGN",
+          "outputField": "SortedBam"
+        }
+      }
+    },
+    {
+      "name": "SortedBamBai",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ALIGN",
+          "outputField": "SortedBamBai"
+        }
+      }
+    },
+    {
+      "name": "SortedBamFlagstat",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ALIGN",
+          "outputField": "SortedBamFlagstat"
+        }
+      }
+    },
+    {
+      "name": "SortedQ5Bam",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ALIGN",
+          "outputField": "SortedQ5Bam"
+        }
+      }
+    },
+    {
+      "name": "SortedQ5BamBai",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ALIGN",
+          "outputField": "SortedQ5BamBai"
+        }
+      }
+    },    
+    {
+      "name": "SortedQ5BamFlagstat",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ALIGN",
+          "outputField": "SortedQ5BamFlagstat"
+        }
+      }
+    },
+    {
+      "name": "TagAlign",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-DEDUP",
+          "outputField": "TagAlign"
+        }
+      }
+    },
+    {
+      "name": "BamForBigwig",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-DEDUP",
+          "outputField": "OutBam"
+        }
+      }
+    }
   ]
 }
