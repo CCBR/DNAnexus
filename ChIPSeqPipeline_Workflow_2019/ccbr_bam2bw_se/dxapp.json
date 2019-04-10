@@ -3,7 +3,7 @@
   "title": "CCBR BAM2BIGWIG SE",
   "summary": "Normalize SE bam files (1 treatment 1 input) using deeptools RPGC method to generate bigwig files",
   "dxapi": "1.0.0",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "authorizedUsers": [
     "user-kopardevn",
     "user-kuynsa",

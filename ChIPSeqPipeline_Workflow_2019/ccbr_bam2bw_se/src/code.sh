@@ -51,31 +51,8 @@ treatmentbw=`echo $treatmentbam|sed "s/.bam/.bw/g"`
 inputbw=`echo $inputbam|sed "s/.bam/.bw/g"`
 inputnormbw=`echo $treatmentbam|sed "s/.bam/.inputnorm.bw/g"`
 
-(>&2 echo "Bigwig files: $treatmentbw $inputbw $inputnormbw")
+dx-docker run -v /data/:/data nciccbr/ccbr_deeptools:v0.0.2 ccbr_bam2bw.bash --treatmentbam $treatmentbam --inputbam $inputbam --treatmentppqt $treatmentppqt --effectivegenomesize $genomesize --ncpus $cpus
 
-treatmentextsize=`cat $treatmentppqt|awk -F"\t" '{print $3}'|awk -F"," '{print $1}'`
-if [ $treatmentextsize -lt 0 ];then
-    treatmentextsize=`cat $treatmentppqt|awk -F"\t" '{print $3}'|awk -F"," '{print $2}'`
-fi  
-if [ $treatmentextsize -lt 0 ];then
-    treatmentextsize="200"
-fi  
-
-treatmentsortedbam=`echo $treatmentbam|sed "s/.bam/.sorted.bam/g"`
-inputsortedbam=`echo $inputbam|sed "s/.bam/.sorted.bam/g"`
-
-dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.7:v032619 samtools sort -@ $cpus -o $treatmentsortedbam $treatmentbam
-dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.7:v032619 samtools sort -@ $cpus -o $inputsortedbam $inputbam
-
-dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.7:v032619 samtools index $treatmentsortedbam
-dx-docker run -v /data/:/data nciccbr/ccbr_samtools_1.7:v032619 samtools index $inputsortedbam
-
-dx-docker run -v /data/:/data nciccbr/ccbr_deeptools_3.2.0:v032619 bamCoverage --bam $treatmentsortedbam -o $treatmentbw --binSize 25 --smoothLength 75 --ignoreForNormalization chrX chrY chrM --numberOfProcessors $cpus --normalizeUsing RPGC --effectiveGenomeSize $genomesize --extendReads $treatmentextsize
-dx-docker run -v /data/:/data nciccbr/ccbr_deeptools_3.2.0:v032619 bamCoverage --bam $inputsortedbam -o $inputbw --binSize 25 --smoothLength 75 --ignoreForNormalization chrX chrY chrM --numberOfProcessors $cpus --normalizeUsing RPGC --effectiveGenomeSize $genomesize --extendReads 200
-
-(>&2 echo "dx-docker run -v /data/:/data nciccbr/ccbr_deeptools_3.2.0:v032619 bigwigCompare --binSize 25 --outFileName $inputnormbw --outFileFormat 'bigwig' --bigwig1 $treatmentbw --bigwig2 $inputbw --operation 'subtract' --skipNonCoveredRegions --numberOfProcessors $cpus")
-
-dx-docker run -v /data/:/data nciccbr/ccbr_deeptools_3.2.0:v032619 bigwigCompare --binSize 25 --outFileName $inputnormbw --outFileFormat 'bigwig' --bigwig1 $treatmentbw --bigwig2 $inputbw --operation 'subtract' --skipNonCoveredRegions --numberOfProcessors $cpus
 
     # Fill in your application code here.
     #
