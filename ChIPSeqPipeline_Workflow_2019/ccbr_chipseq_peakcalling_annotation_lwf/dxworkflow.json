@@ -1,0 +1,414 @@
+{
+  "name": "ccbr_chipseq_peakcalling_annotation",
+  "title": "CCBR ChIPSeq Call Peaks and Annotate",
+  "summary": "Runs PPQT to calculate extsize, then calls broad/narrow peaks using macs2 and then annotates the peaks using uropa",
+  "version": "0.0.1",
+  "authorizedUsers": [
+    "user-kopardevn",
+    "user-kuynsa",
+    "user-annao",
+    "user-cappellacci",
+    "user-pcf"  
+  ],
+  "inputs": [
+    {
+      "name": "InputTagAlign",
+      "class": "file",
+      "patterns": ["*.tagAlign.gz"],
+      "optional": false    
+    },
+    {
+      "name": "TreatmentTagAlign",
+      "class": "file",
+      "patterns": ["*.tagAlign.gz"],
+      "optional": false    
+    },
+    {
+      "name": "InputBam",
+      "class": "file",
+      "patterns": ["*.bam"],
+      "optional": false    
+    },
+    {
+      "name": "TreatmentBam",
+      "class": "file",
+      "patterns": ["*.bam"],
+      "optional": false    
+    },      
+    {
+      "name": "Genome2Resources",
+      "class": "file",
+      "patterns": ["*.tsv"],
+      "optional": false    
+    },   
+    {
+      "name": "Genome",
+      "class": "string",
+      "patterns" : ["mm9", "mm10", "hg19", "hg38"],
+      "optional": false    
+    }  
+  ],
+  "stages": [
+    {
+      "id": "stage-PPQT",
+      "executable": "app-ccbr_ppqt/0.0.2",
+      "folder": "ppqt",
+      "input": {
+        "InBam": {
+          "$dnanexus_link": {
+            "workflowInputField": "TreatmentTagAlign"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x2"
+        }
+      }
+    },
+    {
+      "id": "stage-BAM2BIGWIG",
+      "executable": "app-ccbr_bam2bw_se/0.0.2",
+      "folder": "bigwig",
+      "input":{
+        "TreatmentPPQT": {
+          "$dnanexus_link": {
+            "outputField": "OutPpqt",
+            "stage": "stage-PPQT"
+          }
+        },
+        "TreatmentBam": {
+          "$dnanexus_link": {
+            "workflowInputField": "TreatmentBam"
+          }
+        },
+        "InputBam": {
+          "$dnanexus_link": {
+            "workflowInputField": "InputBam"
+          }
+        },
+        "Genome": {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome"
+          }
+        },
+        "Genome2Resources": {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome2Resources"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x32"
+        }
+      }
+    },
+    {
+      "id": "stage-PEAKCALLING",
+      "executable": "app-ccbr_macs_se_peakcalling/0.1.1",
+      "folder": "peaks",
+      "input": {
+        "TreatmentPPQT": {
+          "$dnanexus_link": {
+            "outputField": "OutPpqt",
+            "stage": "stage-PPQT"
+          }
+        },
+        "TreatmentTagAlign": {
+          "$dnanexus_link": {
+            "workflowInputField": "TreatmentTagAlign"
+          }
+        },
+        "InputTagAlign": {
+          "$dnanexus_link": {
+            "workflowInputField": "InputTagAlign"
+          }
+        },
+        "Genome": {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome"
+          }
+        },
+        "Genome2Resources": {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome2Resources"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x2"
+        }
+      }
+    },
+    {
+      "id": "stage-ANNOTATENARROW",
+      "executable": "app-ccbr_uropa/0.0.1",
+      "folder":"peaks",
+      "input": {
+        "Genome2Resources": {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome2Resources"
+          }
+        },
+        "Genome" : {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome"
+          }
+        },
+        "PeakBedFile": {
+          "$dnanexus_link": {
+            "outputField": "NarrowPeakBed",
+            "stage": "stage-PEAKCALLING"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x4"
+        }
+      }
+    },
+    {
+      "id": "stage-ANNOTATEBROAD",
+      "executable": "app-ccbr_uropa/0.0.1",
+      "folder":"peaks",
+      "input": {
+        "Genome2Resources": {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome2Resources"
+          }
+        },
+        "Genome" : {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome"
+          }
+        },
+        "PeakBedFile": {
+          "$dnanexus_link": {
+            "outputField": "BroadPeakBed",
+            "stage": "stage-PEAKCALLING"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x4"
+        }
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "name": "PPQTTxt",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-PPQT",
+          "outputField": "OutPpqt"
+        }
+      }
+    },
+    {
+      "name": "PPQTPdf",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-PPQT",
+          "outputField": "OutPdf"
+        }
+      }
+    },
+    {
+      "name": "NarrowPeak",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-PEAKCALLING",
+          "outputField": "NarrowPeak"
+        }
+      }
+    },
+    {
+      "name": "NarrowPeakBed",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-PEAKCALLING",
+          "outputField": "NarrowPeakBed"
+        }
+      }
+    },
+    {
+      "name": "BroadPeak",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-PEAKCALLING",
+          "outputField": "BroadPeak"
+        }
+      }
+    },
+    {
+      "name": "BroadPeakBed",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-PEAKCALLING",
+          "outputField": "BroadPeakBed"
+        }
+      }
+    },
+    {
+      "name": "GappedPeak",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-PEAKCALLING",
+          "outputField": "GappedPeak"
+        }
+      }
+    },
+    {
+      "name": "SummitBed",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-PEAKCALLING",
+          "outputField": "SummitBed"
+        }
+      }
+    },
+    {
+      "name": "BroadAllHitsTxt",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ANNOTATEBROAD",
+          "outputField": "AllHitsTxt"
+        }
+      }
+    },
+    {
+      "name": "BroadAllHitsBed",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ANNOTATEBROAD",
+          "outputField": "AllHitsBed"
+        }
+      }
+    },
+    {
+      "name": "BroadFinalHitsTxt",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ANNOTATEBROAD",
+          "outputField": "FinalHitsTxt"
+        }
+      }
+    },
+    {
+      "name": "BroadFinalHitsBed",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ANNOTATEBROAD",
+          "outputField": "FinalHitsBed"
+        }
+      }
+    },
+    {
+      "name": "BroadSummaryPdf",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ANNOTATEBROAD",
+          "outputField": "SummaryPdf"
+        }
+      }
+    },
+    {
+      "name": "NarrowAllHitsTxt",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ANNOTATENARROW",
+          "outputField": "AllHitsTxt"
+        }
+      }
+    },
+    {
+      "name": "NarrowAllHitsBed",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ANNOTATENARROW",
+          "outputField": "AllHitsBed"
+        }
+      }
+    },
+    {
+      "name": "NarrowFinalHitsTxt",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ANNOTATENARROW",
+          "outputField": "FinalHitsTxt"
+        }
+      }
+    },
+    {
+      "name": "NarrowFinalHitsBed",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ANNOTATENARROW",
+          "outputField": "FinalHitsBed"
+        }
+      }
+    },
+    {
+      "name": "NarrowSummaryPdf",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-ANNOTATENARROW",
+          "outputField": "SummaryPdf"
+        }
+      }
+    },
+    {
+      "name": "TreatmentBigwig",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-BAM2BIGWIG",
+          "outputField": "TreatmentBigwig"
+        }
+      }
+    },
+    {
+      "name": "InputBigwig",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-BAM2BIGWIG",
+          "outputField": "InputBigwig"
+        }
+      }
+    },
+    {
+      "name": "InputNormBigwig",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-BAM2BIGWIG",
+          "outputField": "InputNormBigwig"
+        }
+      }
+    }
+  ]
+}
