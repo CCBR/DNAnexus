@@ -38,10 +38,14 @@ genome2resources=$(dx describe "$Genome2Resources" --name)
 dx download "$Genome2Resources" -o $genome2resources
 genomesize=$(python /get_fileid.py $Genome 'effectiveSize' $genome2resources)
 
+nreads=$(dx describe "$Nreads" --name)
+dx download "$Nreads" -o $nreads
+
 tagalignfile=`echo $bam|sed "s/.bam/.DD.tagAlign/g"`
 outbamfile=`echo $bam|sed "s/.bam/.DD.bam/g"`
 
-dx-docker run -v /data/:/data nciccbr/ccbr_macs:v0.0.2 ccbr_macs_filterdup_se.bash --bam $bam --genomesize $genomesize 
+dx-docker run -v /data/:/data nciccbr/ccbr_macs:v0.0.3 ccbr_macs_filterdup_se.bash --bam $bam --genomesize $genomesize 
+cat nreads.txt >> $nreads
 
     # Fill in your application code here.
     #
@@ -65,6 +69,7 @@ dx-docker run -v /data/:/data nciccbr/ccbr_macs:v0.0.2 ccbr_macs_filterdup_se.ba
 
     TagAlign=$(dx upload /data/${tagalignfile}.gz --brief)
     OutBam=$(dx upload /data/$outbamfile --brief)
+    OutNreads=$(dx upload /data/$nreads --brief)
 
     # The following line(s) use the utility dx-jobutil-add-output to format and
     # add output variables to your job's output as appropriate for the output
@@ -73,6 +78,7 @@ dx-docker run -v /data/:/data nciccbr/ccbr_macs:v0.0.2 ccbr_macs_filterdup_se.ba
 
     dx-jobutil-add-output TagAlign "$TagAlign" --class=file
     dx-jobutil-add-output OutBam "$OutBam" --class=file
+    dx-jobutil-add-output OutNreads "$OutNreads" --class=file
 
     kill -9 $SAR_PID
     SarTxt=$(dx upload $sarfile --brief)

@@ -3,7 +3,7 @@
   "title": "CCBR MACS2 Filter Duplicates",
   "summary": "Remove duplicates in SE mapped bam file using macs filterdup",
   "dxapi": "1.0.0",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "authorizedUsers": [
     "user-kopardevn",
     "user-kuynsa",
@@ -25,6 +25,13 @@
       "label": "mm9/10, hg19/38",
       "help": "",
       "class": "string",
+      "optional": false
+    },
+    {
+      "name": "Nreads",
+      "label": "reads stats collection file",
+      "help": "",
+      "class": "file",
       "optional": false
     },
     {
@@ -50,6 +57,13 @@
       "help": "",
       "class": "file",
       "patterns": ["*.bam"]
+    },
+    {
+      "name": "OutNreads",
+      "label": "Nreads output txt file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.nreads.txt"]
     },
     {
       "name": "SarTxt",
