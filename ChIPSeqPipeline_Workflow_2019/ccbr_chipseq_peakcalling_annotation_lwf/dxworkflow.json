@@ -52,7 +52,7 @@
     {
       "id": "stage-PPQT",
       "executable": "app-ccbr_ppqt/0.0.2",
-      "folder": "ppqt",
+      "folder": "qc/ppqt",
       "input": {
         "InBam": {
           "$dnanexus_link": {
