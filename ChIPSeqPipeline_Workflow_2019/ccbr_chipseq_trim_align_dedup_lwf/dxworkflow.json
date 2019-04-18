@@ -33,7 +33,7 @@
   "stages": [
     {
       "id": "stage-TRIM",
-      "executable": "app-ccbr_cutadapt_se/0.1.0",
+      "executable": "app-ccbr_cutadapt_se/0.1.1",
       "folder": "trim",
       "input": {
         "InFq": {
@@ -50,12 +50,18 @@
     },
     {
       "id": "stage-ALIGN",
-      "executable": "app-ccbr_bwa_align_se/0.1.0",
+      "executable": "app-ccbr_bwa_align_se/0.1.1",
       "folder": "bam",
       "input": {
         "InFq": {
           "$dnanexus_link": {
             "outputField": "OutFq",
+            "stage": "stage-TRIM"
+          }
+        },
+        "Nreads": {
+          "$dnanexus_link": {
+            "outputField": "Nreads",
             "stage": "stage-TRIM"
           }
         },
@@ -78,7 +84,7 @@
     },
     {
       "id": "stage-DEDUP",
-      "executable": "app-ccbr_macs_filterdup/0.1.0",
+      "executable": "app-ccbr_macs_filterdup/0.1.1",
       "folder":"bam",
       "input": {
         "Genome2Resources": {
@@ -89,6 +95,12 @@
         "Genome" : {
           "$dnanexus_link": {
             "workflowInputField": "Genome"
+          }
+        },
+        "Nreads": {
+          "$dnanexus_link": {
+            "outputField": "OutNreads",
+            "stage": "stage-ALIGN"
           }
         },
         "Bam": {
@@ -183,6 +195,16 @@
         "$dnanexus_link": {
           "stage": "stage-DEDUP",
           "outputField": "TagAlign"
+        }
+      }
+    },
+    {
+      "name": "Nreads",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-DEDUP",
+          "outputField": "OutNreads"
         }
       }
     },
