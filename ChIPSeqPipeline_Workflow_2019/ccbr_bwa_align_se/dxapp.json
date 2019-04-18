@@ -3,7 +3,7 @@
   "title": "CCBR BWA SE ChIPSeq Aligner",
   "summary": "Remove reads aligning to blacklisted regions and then align SE reads to a reference with BWA generate sorted.bam and sorted.Q5.bam files",
   "dxapi": "1.0.0",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "authorizedUsers": [
     "user-kopardevn",
     "user-kuynsa",
@@ -25,6 +25,13 @@
       "label": "mm10 or hg19 or hg38 etc.",
       "help": "",
       "class": "string",
+      "optional": false
+    },
+    {
+      "name": "Nreads",
+      "label": "Nreads stats collection file",
+      "help": "",
+      "class": "file",
       "optional": false
     },
     {
@@ -50,6 +57,13 @@
       "help": "",
       "class": "file",
       "patterns": ["*.bai"]
+    },
+    {
+      "name": "OutNreads",
+      "label": "Nreads stats collection file",
+      "help": "",
+      "class": "file",
+      "optional": false
     },
     {
       "name": "SortedQ5Bam",

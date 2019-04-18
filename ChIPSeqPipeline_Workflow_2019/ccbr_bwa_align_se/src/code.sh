@@ -39,6 +39,9 @@ dx download "$InFq" -o $infq
 genome2resources=$(dx describe "$Genome2Resources" --name)
 dx download "$Genome2Resources" -o $genome2resources
 
+nreads=$(dx describe "$Nreads" --name)
+dx download "$Nreads" -o $nreads
+
 # download and untar genome bwa index
 RefTarGz=$(python /get_fileid.py $Genome 'bwa' $genome2resources)
 reftargz=$(dx describe "$RefTarGz" --name)
@@ -65,7 +68,8 @@ sortedq5bambaifile=${basefilename}.sorted.Q5.bam.bai
 sortedbamflagstatfile=${sortedbamfile}.flagstat
 sortedq5bamflagstatfile=${sortedq5bamfile}.flagstat
 
-dx-docker run -v /data/:/data nciccbr/ccbr_bwa:v0.0.1 ccbr_bwa_chipseq_align_se.bash --genome $Genome --infastq $infq
+dx-docker run -v /data/:/data nciccbr/ccbr_bwa:v0.0.2 ccbr_bwa_chipseq_align_se.bash --genome $Genome --infastq $infq
+cat nreads.txt >> $nreads
 
     # Fill in your application code here.
     #
@@ -95,6 +99,7 @@ dx-docker run -v /data/:/data nciccbr/ccbr_bwa:v0.0.1 ccbr_bwa_chipseq_align_se.
     SortedQ5BamBai=$(dx upload /data/$sortedq5bambaifile --brief)
     SortedBamFlagstat=$(dx upload /data/$sortedbamflagstatfile --brief)
     SortedQ5BamFlagstat=$(dx upload /data/$sortedq5bamflagstatfile --brief)
+    OutNreads=$(dx upload /data/$nreads --brief)
 
     # The following line(s) use the utility dx-jobutil-add-output to format and
     # add output variables to your job's output as appropriate for the output
@@ -107,6 +112,7 @@ dx-docker run -v /data/:/data nciccbr/ccbr_bwa:v0.0.1 ccbr_bwa_chipseq_align_se.
     dx-jobutil-add-output SortedQ5BamBai "$SortedQ5BamBai" --class=file
     dx-jobutil-add-output SortedBamFlagstat "$SortedBamFlagstat" --class=file
     dx-jobutil-add-output SortedQ5BamFlagstat "$SortedQ5BamFlagstat" --class=file
+    dx-jobutil-add-output OutNreads "$OutNreads" --class=file
 
     kill -9 $SAR_PID
     SarTxt=$(dx upload $sarfile --brief)
