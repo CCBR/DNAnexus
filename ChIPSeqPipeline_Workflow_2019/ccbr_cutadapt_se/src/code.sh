@@ -40,10 +40,12 @@ infq=$(dx describe "$InFq" --name)
 dx download "$InFq" -o $infq
 
 outfilename=`echo $infq|sed "s/.fastq.gz/.trim.fastq.gz/g"`
+samplename=`echo $infq|sed "s/.fastq.gz//g"|sed "s/.R1//g"`
+nreads=${samplename}.nreads.txt
 
 ncpus=`nproc`
 
-dx-docker run -v /data/:/data/ nciccbr/ccbr_cutadapt:v1.0.0 /opt/ccbr_cutadapt_se.sh $infq
+dx-docker run -v /data/:/data/ nciccbr/ccbr_cutadapt:v0.0.2 ccbr_cutadapt_se.bash --infastq $infq
 
     # Fill in your application code here.
     #
@@ -67,6 +69,7 @@ dx-docker run -v /data/:/data/ nciccbr/ccbr_cutadapt:v1.0.0 /opt/ccbr_cutadapt_s
 
 
     OutFq=$(dx upload /data/$outfilename --brief)
+    Nreads=$(dx upload /data/$nreads --brief)
 
     # The following line(s) use the utility dx-jobutil-add-output to format and
     # add output variables to your job's output as appropriate for the output
@@ -74,6 +77,7 @@ dx-docker run -v /data/:/data/ nciccbr/ccbr_cutadapt:v1.0.0 /opt/ccbr_cutadapt_s
     # does.
 
     dx-jobutil-add-output OutFq "$OutFq" --class=file
+    dx-jobutil-add-output Nreads "$Nreads" --class=file
     
     kill -9 $SAR_PID
     SarTxt=$(dx upload $sarfile --brief)
