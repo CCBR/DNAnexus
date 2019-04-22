@@ -3,7 +3,7 @@
   "title": "CCBR MACS SE PEAKCALLING",
   "summary": "Peakcalling using macs (narrow and broad)",
   "dxapi": "1.0.0",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "authorizedUsers": [
     "user-kopardevn",
     "user-kuynsa",
@@ -50,51 +50,30 @@
       "class": "file",
       "patterns": ["*.tagAlign.gz"],
       "optional": false
-    }
+    },
+    {
+      "name": "Broad",
+      "label": "Make broad peak calls",
+      "help": "",
+      "class": "boolean",
+      "optional": true
+    }    
   ],
   "outputSpec": [
     {
-      "name": "NarrowPeak",
-      "label": "NarrowPeak output file",
+      "name": "Peak",
+      "label": "NarrowPeak or BroadPeak output file",
       "help": "",
       "class": "file",
-      "patterns": ["*.narrowPeak"]
+      "patterns": ["*.narrowPeak","*.broadPeak"]
     },
     {
-      "name": "NarrowPeakBed",
-      "label": "NarrowPeak file in bed6 format",
+      "name": "PeakBed",
+      "label": "NarrowPeak or BroadPeak file in bed6 format",
       "help": "",
       "class": "file",
       "patterns": ["*.bed"]
-    },
-    {
-      "name": "BroadPeak",
-      "label": "BroadPeak output file",
-      "help": "",
-      "class": "file",
-      "patterns": ["*.broadPeak"]
-    },
-    {
-      "name": "BroadPeakBed",
-      "label": "BroadPeak file in bed6 format",
-      "help": "",
-      "class": "file",
-      "patterns": ["*.broadPeak"]
-    },
-    {
-      "name": "GappedPeak",
-      "label": "NarrowPeak output file",
-      "help": "",
-      "class": "file",
-      "patterns": ["*.gappedPeak"]
-    },
-    {
-      "name": "SummitsBed",
-      "label": "macs summits bed output file",
-      "help": "",
-      "class": "file",
-      "patterns": ["*.bed"]
-    },
+    }, 
     {
       "name": "SarTxt",
       "label": "Sar output txt file",
