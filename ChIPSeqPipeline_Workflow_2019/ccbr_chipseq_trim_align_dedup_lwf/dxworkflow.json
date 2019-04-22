@@ -83,6 +83,59 @@
       }
     },
     {
+      "id": "stage-FASTQCRAW",
+      "executable": "app-ccbr_fastqc/0.0.1",
+      "folder": "qc/fastqc",
+      "input": {
+        "InFq": {
+          "$dnanexus_link": {
+            "workflowInputField": "InputFastq"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x16"
+        }
+      }
+    },
+    {
+      "id": "stage-FASTQCTRIMMED",
+      "executable": "app-ccbr_fastqc/0.0.1",
+      "folder": "qc/fastqc",
+      "input": {
+        "InFq": {
+          "$dnanexus_link": {
+            "outputField": "OutFq",
+            "stage": "stage-TRIM"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x16"
+        }
+      }
+    },
+    {
+      "id": "stage-PRESEQ",
+      "executable": "app-ccbr_preseq/0.0.2",
+      "folder": "qc/preseq",
+      "input": {
+        "Bam": {
+          "$dnanexus_link": {
+            "outputField": "SortedQ5Bam",
+            "stage": "stage-ALIGN"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x4"
+        }
+      }
+    },
+    {
       "id": "stage-DEDUP",
       "executable": "app-ccbr_macs_filterdup/0.1.1",
       "folder":"bam",
@@ -215,6 +268,56 @@
         "$dnanexus_link": {
           "stage": "stage-DEDUP",
           "outputField": "OutBam"
+        }
+      }
+    },
+    {
+      "name": "OutTxtRaw",
+      "class": "array:file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-FASTQCRAW",
+          "outputField": "OutTxt"
+        }
+      }
+    },
+    {
+      "name": "OutTxtTrimmed",
+      "class": "array:file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-FASTQCTRIMMED",
+          "outputField": "OutTxt"
+        }
+      }
+    },
+    {
+      "name": "CCurve",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-PRESEQ",
+          "outputField": "CCurve"
+        }
+      }
+    },
+    {
+      "name": "NRF",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-PRESEQ",
+          "outputField": "NRF"
+        }
+      }
+    },
+    {
+      "name": "IdxStats",
+      "class": "file",
+      "outputSource": {
+        "$dnanexus_link": {
+          "stage": "stage-PRESEQ",
+          "outputField": "IdxStats"
         }
       }
     }
