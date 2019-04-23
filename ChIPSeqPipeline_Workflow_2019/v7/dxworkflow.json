@@ -1,8 +1,8 @@
 {
-  "name": "v7 ... 2 replicate version",
-  "title": "CCBR ChIPSeq Pipeline v7",
-  "summary": "v7",
-  "version": "0.0.1",
+  "name": "ccbr_chipseq_pipeline_single_end_two_replicates",
+  "title": "CCBR_ChIPSeq_Pipeline_Single_End_Two_Replicates",
+  "summary": "CCBR_ChIPSeq_Pipeline_Single_End_Two_Replicates",
+  "version": "0.0.2",
   "authorizedUsers": [
     "user-kopardevn",
     "user-kuynsa",
