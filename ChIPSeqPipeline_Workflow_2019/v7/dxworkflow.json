@@ -2,7 +2,7 @@
   "name": "ccbr_chipseq_pipeline_single_end_two_replicates",
   "title": "CCBR_ChIPSeq_Pipeline_Single_End_Two_Replicates",
   "summary": "CCBR_ChIPSeq_Pipeline_Single_End_Two_Replicates",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "authorizedUsers": [
     "user-kopardevn",
     "user-kuynsa",
@@ -51,7 +51,7 @@
   "stages": [
     {
       "id": "stage-INPUTPREPREP1",
-      "executable": "workflow-FXvVyv80vbJKzp2vJkjkZkvz",
+      "executable": "workflow-FY07Jg80vbJ0pg01F00zkB88",
       "input": {
         "InputFastq": {
           "$dnanexus_link": {
@@ -72,7 +72,7 @@
     },
     {
       "id": "stage-TREATMENTPREPREP1",
-      "executable": "workflow-FXvVyv80vbJKzp2vJkjkZkvz",
+      "executable": "workflow-FY07Jg80vbJ0pg01F00zkB88",
       "input": {
         "InputFastq": {
           "$dnanexus_link": {
@@ -93,7 +93,7 @@
     },
     {
       "id": "stage-INPUTPREPREP2",
-      "executable": "workflow-FXvVyv80vbJKzp2vJkjkZkvz",
+      "executable": "workflow-FY07Jg80vbJ0pg01F00zkB88",
       "input": {
         "InputFastq": {
           "$dnanexus_link": {
@@ -114,7 +114,7 @@
     },
     {
       "id": "stage-TREATMENTPREPREP2",
-      "executable": "workflow-FXvVyv80vbJKzp2vJkjkZkvz",
+      "executable": "workflow-FY07Jg80vbJ0pg01F00zkB88",
       "input": {
         "InputFastq": {
           "$dnanexus_link": {
@@ -166,7 +166,7 @@
     },
     {
       "id": "stage-PEAKCALLINGREP1",
-      "executable": "workflow-FXv7xfQ0vbJF8x0gPbzfyJv2",
+      "executable": "workflow-FY06gZj0vbJ6ZF6v4K8v4YgF",
       "input": {
         "InputTagAlign": {
           "$dnanexus_link": {
@@ -194,7 +194,7 @@
     },
     {
       "id": "stage-PEAKCALLINGREP1PR1",
-      "executable": "workflow-FXv7xfQ0vbJF8x0gPbzfyJv2",
+      "executable": "workflow-FY06gZj0vbJ6ZF6v4K8v4YgF",
       "input": {
         "InputTagAlign": {
           "$dnanexus_link": {
@@ -222,7 +222,7 @@
     },
     {
       "id": "stage-PEAKCALLINGREP1PR2",
-      "executable": "workflow-FXv7xfQ0vbJF8x0gPbzfyJv2",
+      "executable": "workflow-FY06gZj0vbJ6ZF6v4K8v4YgF",
       "input": {
         "InputTagAlign": {
           "$dnanexus_link": {
@@ -250,7 +250,7 @@
     },
     {
       "id": "stage-PEAKCALLINGREP2",
-      "executable": "workflow-FXv7xfQ0vbJF8x0gPbzfyJv2",
+      "executable": "workflow-FY06gZj0vbJ6ZF6v4K8v4YgF",
       "input": {
         "InputTagAlign": {
           "$dnanexus_link": {
@@ -278,7 +278,7 @@
     },
     {
       "id": "stage-PEAKCALLINGREP2PR1",
-      "executable": "workflow-FXv7xfQ0vbJF8x0gPbzfyJv2",
+      "executable": "workflow-FY06gZj0vbJ6ZF6v4K8v4YgF",
       "input": {
         "InputTagAlign": {
           "$dnanexus_link": {
@@ -306,7 +306,7 @@
     },
     {
       "id": "stage-PEAKCALLINGREP2PR2",
-      "executable": "workflow-FXv7xfQ0vbJF8x0gPbzfyJv2",
+      "executable": "workflow-FY06gZj0vbJ6ZF6v4K8v4YgF",
       "input": {
         "InputTagAlign": {
           "$dnanexus_link": {
@@ -334,7 +334,7 @@
     },
     {
       "id": "stage-PEAKCALLINGREP0",
-      "executable": "workflow-FXv7xfQ0vbJF8x0gPbzfyJv2",
+      "executable": "workflow-FY06gZj0vbJ6ZF6v4K8v4YgF",
       "input": {
         "InputTagAlign": {
           "$dnanexus_link": {
@@ -362,7 +362,7 @@
     },
     {
       "id": "stage-PEAKCALLINGREP0PR1",
-      "executable": "workflow-FXv7xfQ0vbJF8x0gPbzfyJv2",
+      "executable": "workflow-FY06gZj0vbJ6ZF6v4K8v4YgF",
       "input": {
         "InputTagAlign": {
           "$dnanexus_link": {
@@ -390,7 +390,7 @@
     },
     {
       "id": "stage-PEAKCALLINGREP0PR2",
-      "executable": "workflow-FXv7xfQ0vbJF8x0gPbzfyJv2",
+      "executable": "workflow-FY06gZj0vbJ6ZF6v4K8v4YgF",
       "input": {
         "InputTagAlign": {
           "$dnanexus_link": {
@@ -873,13 +873,13 @@
         },
         {
           "$dnanexus_link": {
-            "outputField": "OutTxtRaw",
+            "outputField": "OutZipRaw",
             "stage": "stage-INPUTPREPREP1"
           }
         },
         {
           "$dnanexus_link": {
-            "outputField": "OutTxtTrimmed",
+            "outputField": "OutZipTrimmed",
             "stage": "stage-INPUTPREPREP1"
           }
         },
@@ -897,13 +897,13 @@
         },
         {
           "$dnanexus_link": {
-            "outputField": "OutTxtRaw",
+            "outputField": "OutZipRaw",
             "stage": "stage-TREATMENTPREPREP1"
           }
         },
         {
           "$dnanexus_link": {
-            "outputField": "OutTxtTrimmed",
+            "outputField": "OutZipTrimmed",
             "stage": "stage-TREATMENTPREPREP1"
           }
         },
@@ -921,13 +921,13 @@
         },
         {
           "$dnanexus_link": {
-            "outputField": "OutTxtRaw",
+            "outputField": "OutZipRaw",
             "stage": "stage-INPUTPREPREP2"
           }
         },
         {
           "$dnanexus_link": {
-            "outputField": "OutTxtTrimmed",
+            "outputField": "OutZipTrimmed",
             "stage": "stage-INPUTPREPREP2"
           }
         },
@@ -945,13 +945,13 @@
         },
         {
           "$dnanexus_link": {
-            "outputField": "OutTxtRaw",
+            "outputField": "OutZipRaw",
             "stage": "stage-TREATMENTPREPREP2"
           }
         },
         {
           "$dnanexus_link": {
-            "outputField": "OutTxtTrimmed",
+            "outputField": "OutZipTrimmed",
             "stage": "stage-TREATMENTPREPREP2"
           }
         },
