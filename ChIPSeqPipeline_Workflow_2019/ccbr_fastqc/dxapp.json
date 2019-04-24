@@ -3,7 +3,7 @@
   "title": "CCBR FASTQC",
   "summary": "Fastqc for 1 fastq file",
   "dxapi": "1.0.0",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "authorizedUsers": [
     "user-kopardevn",
     "user-kuynsa",
@@ -30,11 +30,11 @@
       "patterns": ["*.html"]
     },
     {
-      "name": "OutTxt",
-      "label": "fastqc_data.txt file",
+      "name": "OutZip",
+      "label": "OutZip",
       "help": "",
       "class": "file",
-      "patterns": ["*.txt"]
+      "patterns": ["*.zip"]
     },
     {
       "name": "SarTxt",
