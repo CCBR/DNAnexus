@@ -84,7 +84,7 @@
     },
     {
       "id": "stage-FASTQCRAW",
-      "executable": "app-ccbr_fastqc/0.0.1",
+      "executable": "app-ccbr_fastqc/0.0.2",
       "folder": "qc/fastqc",
       "input": {
         "InFq": {
@@ -101,7 +101,7 @@
     },
     {
       "id": "stage-FASTQCTRIMMED",
-      "executable": "app-ccbr_fastqc/0.0.1",
+      "executable": "app-ccbr_fastqc/0.0.2",
       "folder": "qc/fastqc",
       "input": {
         "InFq": {
@@ -272,22 +272,22 @@
       }
     },
     {
-      "name": "OutTxtRaw",
-      "class": "array:file",
+      "name": "OutZipRaw",
+      "class": "file",
       "outputSource": {
         "$dnanexus_link": {
           "stage": "stage-FASTQCRAW",
-          "outputField": "OutTxt"
+          "outputField": "OutZip"
         }
       }
     },
     {
-      "name": "OutTxtTrimmed",
-      "class": "array:file",
+      "name": "OutZipTrimmed",
+      "class": "file",
       "outputSource": {
         "$dnanexus_link": {
           "stage": "stage-FASTQCTRIMMED",
-          "outputField": "OutTxt"
+          "outputField": "OutZip"
         }
       }
     },
