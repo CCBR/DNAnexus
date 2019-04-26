@@ -1,0 +1,1 @@
+echo "Y n" | dx run ccbr_RNA-seq_WF -iFastqFiles=/Testing/I1.R1.fastq.gz -iFastqFiles=/Testing/I1.R2.fastq.gz -iFastqFiles=/Testing/T1.R1.fastq.gz -iFastqFiles=/Testing/T1.R2.fastq.gz -iRefGenome=hg19 --destination=/Testing/LockedWF/ --priority=normal

@@ -1,0 +1,2 @@
+# module load DNAnexus
+dx run applet-FXg40Pj0xx3gYyxP7fK74f72 -iInFq=/Testing/hg19_KSHV/trim/I1.R1.trimmed.fastq.gz -iInFq=/Testing/hg19_KSHV/trim/I1.R2.trimmed.fastq.gz -iInFq=/Testing/hg19_KSHV/trim/T1.R1.trimmed.fastq.gz -iInFq=/Testing/hg19_KSHV/trim/T1.R2.trimmed.fastq.gz  --destination=/Testing/fqscreen_p2/

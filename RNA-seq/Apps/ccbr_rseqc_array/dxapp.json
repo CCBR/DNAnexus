@@ -1,0 +1,190 @@
+{
+  "name": "ccbr_rseqc_array",
+  "title": "ccbr_rseqc_array",
+  "summary": "RSeQC package provides a number of useful modules that can comprehensively evaluate high throughput sequence data especially RNA-seq data. This app includes the following modules: junction annotation, junction saturation, read gc, infer experiment, read distribution.",
+  "dxapi": "1.0.0",
+  "version": "0.0.2",
+  "inputSpec": [
+    {
+      "name": "InBam",
+      "label": "Input Bam File Array",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*.bam", "*.star_rg_added.sorted.dmark.bam"],
+      "optional": false
+    },
+    {
+      "name": "InBai",
+      "label": "Input Bai File Array",
+      "help": "Corresponding Array of Indexed Bam files (needed to run geneBody_coverage.py)",
+      "class": "array:file",
+      "patterns": ["*.bai", "*.star_rg_added.sorted.dmark.bam.bai"],
+      "optional": false
+    },
+    {
+      "name": "RefGenome",
+      "label": "Reference Genome",
+      "help": "Needed for dynamically resolving the correct gene model. Please choose from one of the following: [mm9, mm10, hg38, hg19, hs38d1, hs37d5]",
+      "class": "string",
+      "patterns": ["hg19", "hg38", "mm9", "mm10", "hs38d1", "hs37d5"],
+      "optional": false
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "innerDistFreq_TXT",
+      "label": "Insert Size Frequency Text File",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*.inner_distance_freq.txt"]
+    },
+    {
+      "name": "innerDist_R",
+      "label": "Insert Size Rscript",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*.inner_distance_plot.r"]
+    },
+    {
+      "name": "innerDist_PDF",
+      "label": "Plot of Insert Size (PDF)",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*.inner_distance_plot.pdf"]
+    },
+    {
+      "name": "hkGene_PDF",
+      "label": "Plot of House-keeping Gene Coverage (PDF)",
+      "help": "geneBody_coverage.py needs *.bam.bai file to run",
+      "class": "array:file",
+      "patterns": ["*.geneBodyCoverage.curves.pdf"]
+    },
+    {
+      "name": "hkGene_R",
+      "label": "House-keeping Gene Coverage Rscript",
+      "help": "geneBody_coverage.py needs *.bam.bai file to run",
+      "class": "array:file",
+      "patterns": ["*.geneBodyCoverage.r"]
+    },
+    {
+      "name": "hkGene_TXT",
+      "label": "House-keeping Gene Coverage Text File",
+      "help": "geneBody_coverage.py needs *.bam.bai file to run",
+      "class": "array:file",
+      "patterns": ["*.geneBodyCoverage.txt"]
+    },
+    {
+      "name": "JunctSat_PDF",
+      "label": "Plot of Junction Saturation (PDF)",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*.junctionSaturation_plot.pdf"]
+    },
+    {
+      "name": "JunctSat_R",
+      "label": "Junction Saturation Rscript",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*.junctionSaturation_plot.r"]
+    },
+    {
+      "name": "JunctAnn_R",
+      "label": " Junction Annotation Rscript",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*.junction_plot.r"]
+    },
+    {
+      "name": "JunctAnn_xls",
+      "label": " Junction Annotation xls file",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*.junction.xls"]
+    },
+    {
+      "name": "JunctAnn_bed",
+      "label": " Junction Annotation bed file",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*.junction.bed"]
+    },
+    {
+      "name": "ReadGC_pdf",
+      "label": "Plot of GC distribution of reads ",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*.GC_plot.pdf"]
+    },
+    {
+      "name": "ReadGC_R",
+      "label": "GC distribution rscript ",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*.GC_plot.r"]
+    },
+    {
+      "name": "ReadGC_xls",
+      "label": "GC distribution xls file",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*.GC.xls"]
+    },
+    {
+      "name": "inferExp",
+      "label": "Infers library strandedness",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*"]
+    },
+    {
+      "name": "ReadDist",
+      "label": "Calculates distribution of reads over genomic features",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*"]
+    }
+  ],
+  "runSpec": {
+    "execDepends": [
+      {
+        "name": "tree"
+      },
+      {
+        "name": "parallel"
+      }
+    ],
+    "file": "src/code.sh",
+    "release": "14.04",
+    "interpreter": "bash",
+    "timeoutPolicy": {
+      "*": {
+        "hours": 12
+      }
+    },
+    "distribution": "Ubuntu"
+  },
+  "authorizedUsers": [
+    "user-kuynsa",
+    "user-pcf",
+    "user-annao",
+    "user-kopardevn",
+    "user-cappellacci"
+  ],
+  "regionalOptions": {
+    "aws:us-east-1": {
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd2_x2"
+        }
+      }
+    }
+  },
+  "details": {},
+  "categories": [],
+  "access": {
+    "project": "CONTRIBUTE",
+    "network": [
+      "*"
+    ]
+  }
+}
