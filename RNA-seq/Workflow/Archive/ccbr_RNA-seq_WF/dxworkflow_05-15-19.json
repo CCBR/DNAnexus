@@ -12,7 +12,7 @@
       "name": "FastqFiles"
     },
     {
-      "help": "Needed for dynamically resolving the correct reference files. Please choose from one of the following: [mm9, mm10, hg38, hg38_HPV16, hg19, hg19_KSHV, hs38d1, hs37d5, Mmul_8.0.1]",
+      "help": "Needed for dynamically resolving the correct reference files. Please choose from one of the following: [mm9, mm10, hg38, hg19, hs38d1, hs37d5, Mmul_8.0.1]",
       "label": "Reference Genome",
       "patterns": ["hg19", "hg19_KSHV", "hg38", "hg38_HPV16", "mm9", "mm10", "Mmul_8.0.1"],
       "optional": false,
