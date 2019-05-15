@@ -48,6 +48,8 @@ echo "Y n" | dx run /Workflow/ccbr_RNA-seq_WF \
   --priority=high
 ```
 
+For more detailed documentation about RNA-seq and the pipeline, please checkout our user [documentation page](RNA-seq/README.md).
+
 ## 2. ChIP-seq
 ##### Description:
 Under Constuction: *Coming Soon!*
