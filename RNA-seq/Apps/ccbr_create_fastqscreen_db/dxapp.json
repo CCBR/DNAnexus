@@ -1,0 +1,67 @@
+{
+  "name": "ccbr_create_fastqscreen_db",
+  "title": "ccbr_create_fastqscreen_db",
+  "summary": "create a tar ball with fastqscreen bowtie2 indexs and conf file",
+  "dxapi": "1.0.0",
+  "version": "0.0.1",
+  "inputSpec": [
+    {
+      "name": "InFa",
+      "label": "Input Fasta files",
+      "class": "array:file",
+      "optional": false,
+      "patterns": [
+        "*.fasta",
+        "*.fa"
+      ],
+      "help": ""
+    },
+    {
+      "name": "DbName",
+      "label": "name of the fastqscreen database",
+      "class": "string",
+      "optional": false,
+      "help": ""
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "OutTar",
+      "label": "Output tar file",
+      "class": "file",
+      "patterns": [
+        "*.tar"
+      ],
+      "help": ""
+    }
+  ],
+  "runSpec": {
+    "execDepends": [
+        {"name": "tree"}
+                   ],
+    "timeoutPolicy": {
+      "*": {
+        "hours": 48
+      }
+    },
+    "interpreter": "bash",
+    "release": "14.04",
+    "distribution": "Ubuntu",
+    "file": "src/ccbr_create_fastqscreen_db.sh"
+  },
+  "access": {
+    "project": "CONTRIBUTE",
+    "network": [
+      "*"
+    ]
+  },
+  "regionalOptions": {
+    "aws:us-east-1": {
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem2_ssd1_x2"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "name": "ccbr_fastqc_array",
+  "title": "ccbr_fastqc_array",
+  "summary": "Run fastqc on an array of fastq files in parallel",
+  "dxapi": "1.0.0",
+  "version": "0.0.1",
+  "inputSpec": [
+    {
+      "name": "InFq",
+      "label": "InFq",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*.fastq.gz", "*.fastq"],
+      "optional": false
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "OutHtml",
+      "label": "OutHtml",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*_fastqc_report.html"]
+    },
+    {
+      "name": "OutTxt",
+      "label": "OutTxt",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*_fastqc_data.txt"]
+    }
+  ],
+  "runSpec": {
+    "execDepends": [
+      {
+        "name": "tree"
+      }
+    ],
+    "file": "src/code.sh",
+    "release": "14.04",
+    "interpreter": "bash",
+    "timeoutPolicy": {
+      "*": {
+        "hours": 48
+      }
+    },
+    "distribution": "Ubuntu"
+  },
+  "authorizedUsers": [
+    "user-kuynsa",
+    "user-pcf",
+    "user-annao",
+    "user-kopardevn",
+    "user-cappellacci"
+  ],
+  "regionalOptions": {
+    "aws:us-east-1": {
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_x4"
+        }
+      }
+    }
+  },
+  "details": {},
+  "categories": [],
+  "access": {
+    "project": "CONTRIBUTE",
+    "network": [
+      "*"
+    ]
+  }
+}

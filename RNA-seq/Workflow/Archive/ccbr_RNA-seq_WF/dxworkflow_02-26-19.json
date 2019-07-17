@@ -1,0 +1,340 @@
+{
+  "name": "ccbr_RNA-seq_WF",
+  "title": "ccbr_RNA-seq_WF",
+  "summary": "Center for Cancer Research Collaborative Bioinformatics Research: RNA-seq Pipeline",
+  "inputs": [
+    {
+      "help": "Please a series of fastq files: -iFastqFiles=/f1.R1.fastq.gz -iFastqFiles=/f1.R2.fastq.gz -iFastqFiles=/Testing/f2.R1.fastq.gz -iFastqFiles=/f2.R2.fastq.gz",
+      "label": "Input Fastq File Array",
+      "patterns": ["*.fastq.gz"],
+      "optional": false,
+      "class": "array:file",
+      "name": "FastqFiles"
+    },
+    {
+      "help": "Needed for dynamically resolving the correct reference files. Please choose from one of the following: [mm9, mm10, hg38, hg19, hs38d1, hs37d5]",
+      "label": "Reference Genome",
+      "patterns": ["hg19", "hg38", "mm9", "mm10", "hs38d1", "hs37d5"],
+      "optional": false,
+      "class": "string",
+      "name": "RefGenome"
+    }
+  ],
+  "stages": [
+    {
+      "id": "rawfastqc",
+      "executable": "app-ccbr_fastqc_array/0.0.1",
+      "folder": "rawQC",
+      "input": {
+        "InFq": {
+          "$dnanexus_link": {
+            "workflowInputField": "FastqFiles"
+          }
+        }
+      }
+    },
+    {
+      "id": "trim_pe",
+      "executable": "app-ccbr_cutadapt_array/0.0.1",
+      "folder": "trim",
+      "input": {
+        "InFq": {
+          "$dnanexus_link": {
+            "workflowInputField": "FastqFiles"
+          }
+        }
+      }
+    },
+    {
+      "id": "fastqc",
+      "executable": "app-ccbr_fastqc_array/0.0.1",
+      "folder": "QC",
+      "input": {
+        "InFq": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutFq",
+              "stage": "trim_pe"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "fastq_screen_p1",
+      "executable": "app-ccbr_fastqscreen_db1_array/0.0.3",
+      "folder": "fqscreen1",
+      "input": {
+        "InFq": [
+          {
+            "$dnanexus_link": {
+              "inputField": "InFq",
+              "stage": "fastqc"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "fastq_screen_p2",
+      "executable": "app-ccbr_fastqscreen_db2_array/0.0.2",
+      "folder": "fqscreen2",
+      "input": {
+        "InFq": [
+          {
+            "$dnanexus_link": {
+              "inputField": "InFq",
+              "stage": "fastq_screen_p1"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "star_p1",
+      "executable": "app-ccbr_star_p1/0.0.1",
+      "folder": "star",
+      "input": {
+        "TrimmedFastqcTxt": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutTxt",
+              "stage": "fastqc"
+            }
+          }
+        ],
+        "TrimmedFq": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutFq",
+              "stage": "trim_pe"
+            }
+          }
+        ],
+        "RawFq": [
+          {
+            "$dnanexus_link": {
+              "inputField": "InFq",
+              "stage": "rawfastqc"
+            }
+          }
+        ],
+        "Genome": {
+          "$dnanexus_link": {
+            "workflowInputField": "RefGenome"
+          }
+        }
+      },
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem2_hdd2_x1"
+        }
+      }
+    },
+    {
+      "id": "star_p2",
+      "executable": "app-ccbr_star_p2/0.0.1",
+      "folder": "star",
+      "input": {
+        "TrimmedFastqcTxt": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutTxt",
+              "stage": "fastqc"
+            }
+          }
+        ],
+        "TrimmedFq": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutFq",
+              "stage": "trim_pe"
+            }
+          }
+        ],
+        "RawFq": [
+          {
+            "$dnanexus_link": {
+              "inputField": "InFq",
+              "stage": "rawfastqc"
+            }
+          }
+        ],
+        "UniqSJOutTab": {
+          "$dnanexus_link": {
+            "outputField": "UniqSJOutTab",
+            "stage": "star_p1"
+          }
+        },
+        "Genome": {
+          "$dnanexus_link": {
+            "workflowInputField": "RefGenome"
+          }
+        }
+      }
+    },
+    {
+      "id": "rsem",
+      "executable": "app-ccbr_bam2rsem/0.0.1",
+      "folder": "rsem",
+      "input": {
+        "Genome": {
+          "$dnanexus_link": {
+            "workflowInputField": "RefGenome"
+          }
+        },
+        "TranscriptomeBam": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutTranscriptomeBam",
+              "stage": "star_p2"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "merge_rsem",
+      "executable": "app-ccbr_rsem_results_merge/0.0.2",
+      "folder": "rsem",
+      "input": {
+        "IsoformResults": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutRSEMisoforms",
+              "stage": "rsem"
+            }
+          }
+        ],
+        "GeneResults": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutRSEMgenes",
+              "stage": "rsem"
+            }
+          }
+        ],
+        "Genome": {
+          "$dnanexus_link": {
+            "workflowInputField": "RefGenome"
+          }
+        }
+      }
+    },
+    {
+      "id": "rseqc",
+      "executable": "app-ccbr_rseqc_array/0.0.2",
+      "folder": "rseqc",
+      "input": {
+        "InBam": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutStarDmarkBam",
+              "stage": "star_p2"
+            }
+          }
+        ],
+        "RefGenome": {
+          "$dnanexus_link": {
+            "workflowInputField": "RefGenome"
+          }
+        },
+        "InBai": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutStarDmarkBai",
+              "stage": "star_p2"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "multiqc",
+      "executable": "app-ccbr_rnaseq_multiqc/0.0.1",
+      "folder": "report",
+      "input": {
+        "STAR_final_out_files": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutLog",
+              "stage": "star_p2"
+            }
+          }
+        ],
+        "RawFastQC_files": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutTxt",
+              "stage": "rawfastqc"
+            }
+          }
+        ],
+        "FastqScreenDB1_files": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutTxt",
+              "stage": "fastq_screen_p1"
+            }
+          }
+        ],
+        "RSeQC_genebody_coverage_files": [
+          {
+            "$dnanexus_link": {
+              "outputField": "hkGene_TXT",
+              "stage": "rseqc"
+            }
+          }
+        ],
+        "Picard_duplic_files": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutStarDuplic",
+              "stage": "star_p2"
+            }
+          }
+        ],
+        "FastqScreenDB2_files": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutTxt",
+              "stage": "fastq_screen_p2"
+            }
+          }
+        ],
+        "RSeQC_inner_distance_files": [
+          {
+            "$dnanexus_link": {
+              "outputField": "innerDistFreq_TXT",
+              "stage": "rseqc"
+            }
+          }
+        ],
+        "FastQC_files": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutTxt",
+              "stage": "fastqc"
+            }
+          }
+        ],
+        "RSeQC_infer_experiment_files": [
+          {
+            "$dnanexus_link": {
+              "outputField": "inferExp",
+              "stage": "rseqc"
+            }
+          }
+        ],
+        "Picard_RNASeqMetrics_files": [
+          {
+            "$dnanexus_link": {
+              "outputField": "OutRnaSeqMetricsTxt",
+              "stage": "star_p2"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
