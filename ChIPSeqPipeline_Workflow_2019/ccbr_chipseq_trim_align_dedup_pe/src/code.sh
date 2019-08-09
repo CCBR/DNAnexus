@@ -43,11 +43,25 @@ ncpus=`nproc`
 dx-docker run \
 -v /data/:/data \
 -v /index/:/index \
-nciccbr/ccbr_chipseq_trim_align_dedup:v0.0.1 /opt/ccbr_chipseq_trim_align_pe.bash \
+nciccbr/ccbr_chipseq_trim_align_dedup:v0.0.1 /opt/ccbr_chipseq_trim_align_dedup_pe.bash \
 --samplename $SampleName \
 --infastq1 $infqr1 \
 --infastq2 $infqr2 \
 --genome $Genome
+
+
+bambase=${SampleName}.Q5
+ccurve=${bambase}.c_curve
+nrf=${bambase}.nrf.txt
+idxstats=${bambase}.bam.idxstats
+
+dx-docker run \
+-v /data/:/data \
+nciccbr/ccbr_preseq:v0.0.1 ccbr_chipseq_preseq.bash \
+--bam=${bambase}.bam \
+--ncpus=$ncpus \
+--paired
+
 
 Q5DDbam=$(dx upload /data/${SampleName}.Q5DD.bam --brief)
 Q5DDflagstat=$(dx upload /data/${SampleName}.Q5DD.bam.flagstat --brief)
@@ -63,8 +77,10 @@ noBLR1fastqzip=$(dx upload /data/$noblr1fastqzip --brief)
 noBLR2fastqzip=$(dx upload /data/$noblr2fastqzip --brief)
 nreads=${SampleName}.nreads.txt
 Nreads=$(dx upload /data/$nreads --brief)
-tagalign=${SampleName}.Q5DD.tagAlign.gz
-TagAlign=$(dx upload /data/$tagalign --brief)
+    CCurve=$(dx upload /data/$ccurve --brief)
+    NRF=$(dx upload /data/$nrf --brief)
+    IdxStats=$(dx upload /data/$idxstats --brief)
+
 
     dx-jobutil-add-output Q5DDbam "$Q5DDbam" --class=file
     dx-jobutil-add-output Q5DDflagstat "$Q5DDflagstat" --class=file
@@ -73,7 +89,9 @@ TagAlign=$(dx upload /data/$tagalign --brief)
     dx-jobutil-add-output noBLR1fastqzip "$noBLR1fastqzip" --class=file
     dx-jobutil-add-output noBLR2fastqzip "$noBLR2fastqzip" --class=file
     dx-jobutil-add-output Nreads "$Nreads" --class=file
-    dx-jobutil-add-output TagAlign "$TagAlign" --class=file
+    dx-jobutil-add-output CCurve "$CCurve" --class=file
+    dx-jobutil-add-output NRF "$NRF" --class=file
+    dx-jobutil-add-output IdxStats "$IdxStats" --class=file
 
 
     kill -9 $SAR_PID

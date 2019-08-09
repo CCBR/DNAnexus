@@ -1,8 +1,9 @@
 {
   "name": "ccbr_chipseq_trim_align_dedup_pe",
   "title": "CCBR TAD PE",
-  "summary": "Trims PE reads using cutadapt, removes reads aligning to blacklisted regions (including mitochondria and ribosomes), aligns reads to genome and removes duplicate reads using macs2 filterdup for BAMPE",
+  "summary": "Trims PE reads using cutadapt, removes reads aligning to blacklisted regions (including mitochondria and ribosomes), aligns reads to genome and removes duplicate reads using picardtools",
   "dxapi": "1.0.0",
+  "version": "0.0.2",
   "inputSpec": [
     {
       "name": "SampleName",
@@ -91,11 +92,25 @@
       "patterns": ["*.zip"]
     },
     {
-      "name": "TagAlign",
-      "label": "Deduplicated TagAlign file",
+      "name": "CCurve",
+      "label": "Ccurve text file",
       "help": "",
       "class": "file",
-      "patterns": ["*.tagAlign.gz", "*.tagAlign"]
+      "patterns": ["*.c_curve"]
+    },
+    {
+      "name": "NRF",
+      "label": "NRF etc. text file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.nrf.txt"]
+    },
+    {
+      "name": "IdxStats",
+      "label": "IdxStats text file",
+      "help": "",
+      "class": "file",
+      "patterns": ["*.idxstats"]
     }
   ],
   "runSpec": {
