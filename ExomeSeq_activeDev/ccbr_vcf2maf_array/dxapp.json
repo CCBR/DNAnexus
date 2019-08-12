@@ -61,7 +61,7 @@
   "runSpec": {
     "timeoutPolicy": {
       "*": {
-        "hours": 12
+        "hours": 8
       }
     },
     "interpreter": "bash",
@@ -75,6 +75,15 @@
       "*"
     ]
   },
+  "authorizedUsers": [
+    "user-kuynsa",
+    "user-pcf",
+    "user-annao",
+    "user-kopardevn",
+    "user-cappellacci",
+    "user-al_lobanov",
+    "user-rfinney"
+  ],
   "regionalOptions": {
     "aws:us-east-1": {
       "systemRequirements": {
