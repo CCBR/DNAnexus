@@ -62,7 +62,13 @@ nciccbr/ccbr_preseq:v0.0.1 ccbr_chipseq_preseq.bash \
 --ncpus=$ncpus \
 --paired
 
+    (>&2 echo "DEBUG:Listing all files in data")
+    (>&2 ls -larth)
+    (>&2 echo "Done listing")
 
+
+Q5bam=$(dx upload /data/${SampleName}.Q5.bam --brief)
+Q5flagstat=$(dx upload /data/${SampleName}.Q5.bam.flagstat --brief)
 Q5DDbam=$(dx upload /data/${SampleName}.Q5DD.bam --brief)
 Q5DDflagstat=$(dx upload /data/${SampleName}.Q5DD.bam.flagstat --brief)
 r1fastqzip=`echo $infqr1|awk -F".fastq" '{printf("%s_fastqc.zip",$1)}'`
@@ -82,6 +88,8 @@ Nreads=$(dx upload /data/$nreads --brief)
     IdxStats=$(dx upload /data/$idxstats --brief)
 
 
+    dx-jobutil-add-output Q5bam "$Q5bam" --class=file
+    dx-jobutil-add-output Q5flagstat "$Q5flagstat" --class=file
     dx-jobutil-add-output Q5DDbam "$Q5DDbam" --class=file
     dx-jobutil-add-output Q5DDflagstat "$Q5DDflagstat" --class=file
     dx-jobutil-add-output R1fastqzip "$R1fastqzip" --class=file
