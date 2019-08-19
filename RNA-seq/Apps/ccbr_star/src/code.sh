@@ -25,7 +25,7 @@ run_star() {
 
 	genomeDir=`find /data/ -maxdepth 1 -name "*genes-*"`
 
-	dx-docker run -v /data/:/data kopardev/ccbr_star_2.6.0a STAR \
+	dx-docker run -v /data/:/data nciccbr/ccbr_star_${STARVERSION} STAR \
 		--genomeDir ${genomeDir} \
 		--outFilterIntronMotifs RemoveNoncanonicalUnannotated \
 		--outSAMstrandField None \
@@ -152,7 +152,10 @@ main() {
     echo "Value of TrimmedFq: '${TrimmedFq[@]}'"
     echo "Value of TrimmedFastqcTxt: '${TrimmedFastqcTxt[@]}'"
     echo "Value of Genome: '$Genome'"
-    
+    echo "Value of GenomeResources: $GenomeResources"
+    echo "Value of StarVersion: '$StarVersion'" # Optional Argument: default set to latest version 
+
+    # Creating Output Directory Structure for Parallel Uploading
 	mkdir -p /data
 	mkdir -p $HOME/out/OutTab
 	mkdir -p $HOME/out/OutReadsPerGeneTab
@@ -163,6 +166,11 @@ main() {
 	mkdir -p $HOME/out/OutStarDmarkBai
 	mkdir -p $HOME/out/OutRnaSeqMetricsTxt
 	
+	# Download Genome Resources file: 'genome2resources.tsv'
+	genomeresources=$(dx describe "$GenomeResources" --name)
+	dx download "$GenomeResources" -o "/${genomeresources}" # download to '/'
+
+	# Creating Directory for Input FastQC data (used to getting read length)
 	mkdir -p /data/txt
 	cd /data/txt
 	for i in ${!TrimmedFastqcTxt[@]}
@@ -176,7 +184,8 @@ main() {
 	(>&2 tree /data)
 	(>&2 echo "Done listing")
 
-	tarfile=$(python /get_starindexid.py /data/txt $Genome)
+	tarfile=$(python /get_starindexid.py /data/txt $Genome $StarVersion)
+	(>&2 echo "Printing the value of tarfile: ${tarfile}")
 	tarfile="project-FPkJp0Q0xx3Y9XXKKzB0408Y:${tarfile}"
  	
 	gtffile=$(python /get_fileid.py $Genome 'gtffile')
@@ -199,7 +208,7 @@ main() {
 		r2=$(dx describe "${RawFq[$i+1]}" --name)
 		r1=`echo $r1|sed "s/.fastq/.trimmed.fastq/g"`
 		r2=`echo $r2|sed "s/.fastq/.trimmed.fastq/g"`
-		process_job=$(dx-jobutil-new-job run_star -iR1=$r1 -iR2=$r2 -iTarfile=$tarfile -iGTFfile=$gtffile --instance-type="mem1_ssd1_x32")
+		process_job=$(dx-jobutil-new-job run_star -iR1=$r1 -iR2=$r2 -iTarfile=$tarfile -iGTFfile=$gtffile -iSTARVERSION=$StarVersion --instance-type="mem1_ssd1_x32")
 		echo "Value of process_job: '$process_job'"
 		subjobids="$subjobids $process_job"
 	done
