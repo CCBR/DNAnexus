@@ -3,14 +3,22 @@
   "title": "ccbr_bam2rsem",
   "summary": "Use RSEM to count genes and isoforms",
   "dxapi": "1.0.0",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "inputSpec": [
     {
       "name": "TranscriptomeBam",
-      "label": "STAR pass 2 generated Aligned.toTranscriptome.out.bam file",
+      "label": "STAR Transcriptome Bam file",
       "help": "",
       "class": "array:file",
       "patterns": ["*.toTranscriptome.out.bam"],
+      "optional": false
+    },
+    {
+      "name": "GenomeResources",
+      "label": "Reference Files for each Genome",
+      "help": "Genomic Resource file: 'genome2resources.tsv'",
+      "class": "file",
+      "patterns": ["*.tsv"],
       "optional": false
     },
     {
