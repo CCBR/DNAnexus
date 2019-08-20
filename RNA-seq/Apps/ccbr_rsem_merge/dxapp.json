@@ -3,7 +3,7 @@
   "title": "ccbr_rsem_merge",
   "summary": "Merge results from different samples and create merged files for expected counts, FPKM and TPM values",
   "dxapi": "1.0.0",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "inputSpec": [
     {
       "name": "GeneResults",
@@ -22,9 +22,17 @@
       "optional": false
     },
     {
+      "name": "GenomeResources",
+      "label": "Reference Files for each Genome",
+      "help": "Genomic Resource file: 'genome2resources.tsv'",
+      "class": "file",
+      "patterns": ["*.tsv"],
+      "optional": false
+    },
+    {
       "name": "Genome",
-      "label": "hg19 or hg19_KSHV or hg38 or hg38_HPV16 or mm9 or mm10 or Mmul_8.0.1",
-      "help": "",
+      "label": "Reference Genome: hg19 or hg19_KSHV or hg38 or hg38_HPV16 or mm9 or mm10 or Mmul_8.0.1",
+      "help": "Reference genome",
       "class": "string",
       "optional": false
     }
@@ -59,11 +67,6 @@
       },
       {
         "name": "python2.7"
-      },
-      {
-        "version": "0.23.4",
-        "package_manager": "pip",
-        "name": "pandas"
       }
     ],
     "file": "src/code.sh",
@@ -71,7 +74,7 @@
     "interpreter": "bash",
     "timeoutPolicy": {
       "*": {
-        "hours": 10
+        "hours": 5
       }
     },
     "distribution": "Ubuntu"
