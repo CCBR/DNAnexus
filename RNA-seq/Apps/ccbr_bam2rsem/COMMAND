@@ -1,0 +1,2 @@
+# Example Command
+dx run applet-FbJQZx80xx3j3FkvB9xPxGfG -iTranscriptomeBam=file-FbJKY280p6BqV1y89zPG2QJb -iTranscriptomeBam=file-FbJKY280p6BzjpqgPyf6jBqP -iGenomeResources=file-FbJJz300xx3qbfp80v1vVKKp -iGenome=hg19

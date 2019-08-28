@@ -2,7 +2,9 @@ import sys,os,glob
 #args
 #1. txt folder
 #2. genomename eg. hg19
-basefolder=sys.argv[1] # QC or rawQC folder
+#3. StarVersion '2.7.0f' or '2.6.0b'
+basefolder=sys.argv[1]  # QC or rawQC folder
+starversion=sys.argv[3] # required: valid options are '2.7.0f' or '2.6.0b'
 txts=glob.glob(basefolder+"/*.txt")
 read_lengths=[]
 for f in txts:
@@ -16,7 +18,7 @@ allrls=[50,75,100,125,150]
 if not a in allrls:
   for rl in allrls:
     if a > rl:
-      continue 
+      continue
     else:
       a=rl
       break
@@ -26,4 +28,4 @@ for i in list(map(lambda x:x.strip().split("\t"),open("/genome2resources.tsv").r
   if not i[0] in genome2resource:
     genome2resource[i[0]]=dict()
   genome2resource[i[0]][i[1]]=i[2]
-print(genome2resource[sys.argv[2]][a])
+print(genome2resource[sys.argv[2]]['{}_{}'.format(a, starversion)])

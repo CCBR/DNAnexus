@@ -12,26 +12,9 @@
       "name": "FastqFiles"
     },
     {
-      "name": "ReferenceFiles",
-      "label": "Reference Files for each Genome",
-      "help": "Genomic Resource file: 'genome2resources.tsv': see example (file-FbJJz300xx3qbfp80v1vVKKp)",
-      "class": "file",
-      "patterns": ["*.tsv"],
-      "optional": false
-    },
-    {
-      "name": "StarVersion",
-      "label": "Version of STAR to use for alignment: '2.6.0a' [default] or '2.7.0f'",
-      "help": "Version of STAR to Run: '2.6.0a' or '2.7.0f'. Optional Argument. Default is set to latest verison: '2.7.0f'.",
-      "class": "string",
-      "optional": true,
-      "default": "2.7.0f",
-      "choices": ["2.6.0a", "2.7.0f"]
-    },
-    {
-      "help": "Needed for dynamically resolving the correct reference files. Please choose from one of the following: [mm9, mm10, mm10_M18, hg38, hg38_v28, hg38_HPV16, hg19, hg19_KSHV, hs38d1, hs37d5, Mmul_8.0.1]",
+      "help": "Needed for dynamically resolving the correct reference files. Please choose from one of the following: [mm9, mm10, hg38, hg38_HPV16, hg19, hg19_KSHV, hs38d1, hs37d5, Mmul_8.0.1]",
       "label": "Reference Genome",
-      "patterns": ["hg19", "hg19_KSHV", "hg38", "hg38_HPV16", "mm9", "mm10", "Mmul_8.0.1", "mm10_M18", "hg38_v28"],
+      "patterns": ["hg19", "hg19_KSHV", "hg38", "hg38_HPV16", "mm9", "mm10", "Mmul_8.0.1"],
       "optional": false,
       "class": "string",
       "name": "RefGenome"
@@ -109,7 +92,7 @@
     },
     {
       "id": "star",
-      "executable": "app-ccbr_star/0.0.7",
+      "executable": "app-ccbr_star/0.0.6",
       "folder": "star",
       "input": {
         "TrimmedFastqcTxt": [
@@ -140,32 +123,17 @@
           "$dnanexus_link": {
             "workflowInputField": "RefGenome"
           }
-        },
-        "GenomeResources": {
-          "$dnanexus_link": {
-            "workflowInputField": "ReferenceFiles"
-          }
-        },
-        "StarVersion": {
-          "$dnanexus_link": {
-            "workflowInputField": "StarVersion"
-          }
         }
       }
     },
     {
       "id": "rsem",
-      "executable": "app-ccbr_bam2rsem/0.0.6",
+      "executable": "app-ccbr_bam2rsem/0.0.5",
       "folder": "rsem",
       "input": {
         "Genome": {
           "$dnanexus_link": {
             "workflowInputField": "RefGenome"
-          }
-        },
-        "GenomeResources": {
-          "$dnanexus_link": {
-            "workflowInputField": "ReferenceFiles"
           }
         },
         "TranscriptomeBam": [
@@ -180,7 +148,7 @@
     },
     {
       "id": "merge_rsem",
-      "executable": "app-ccbr_rsem_merge/0.0.3",
+      "executable": "app-ccbr_rsem_merge/0.0.2",
       "folder": "rsem",
       "input": {
         "IsoformResults": [
@@ -202,11 +170,6 @@
         "Genome": {
           "$dnanexus_link": {
             "workflowInputField": "RefGenome"
-          }
-        },
-        "GenomeResources": {
-          "$dnanexus_link": {
-            "workflowInputField": "ReferenceFiles"
           }
         }
       }

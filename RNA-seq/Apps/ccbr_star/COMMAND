@@ -1,1 +1,9 @@
-dx run ccbr_star -iTrimmedFq=file-FVp579j09v4Jx48vBXX9X381 -iTrimmedFq=file-FVp579j09v4052fFBY9P4GK2 -iTrimmedFq=file-FVp579j09v423320BYgz2Gb7 -iTrimmedFq=file-FVp579j09v4607gBBXfkzP9z -iGenome=hg19 -iRawFq=/Testing/I1.R1.fastq.gz -iRawFq=/Testing/I1.R2.fastq.gz -iRawFq=/Testing/T1.R1.fastq.gz -iRawFq=/Testing/T1.R2.fastq.gz -iTrimmedFastqcTxt=file-FVp58K809PXfzB3xBXZvJgZ7 -iTrimmedFastqcTxt=file-FVp58K809PXpx21jBZ3yYGQ4 -iTrimmedFastqcTxt=file-FVp58K809PXgY6fQBXgJQ6qb -iTrimmedFastqcTxt=file-FVp58K809PXyQ3ppBJzVv5bP
+# Example Usage: 
+
+## Run STAR/2.6.0a
+dx run applet-FbJK1bj0xx3fZYyJ4q10zjFz -iTrimmedFq=file-FVp579j09v4Jx48vBXX9X381 -iTrimmedFq=file-FVp579j09v4052fFBY9P4GK2 -iTrimmedFq=file-FVp579j09v423320BYgz2Gb7 -iTrimmedFq=file-FVp579j09v4607gBBXfkzP9z -iGenome=hg19 -iRawFq=/Testing/I1.R1.fastq.gz -iRawFq=/Testing/I1.R2.fastq.gz -iRawFq=/Testing/T1.R1.fastq.gz -iRawFq=/Testing/T1.R2.fastq.gz -iTrimmedFastqcTxt=file-FVp58K809PXfzB3xBXZvJgZ7 -iTrimmedFastqcTxt=file-FVp58K809PXpx21jBZ3yYGQ4 -iTrimmedFastqcTxt=file-FVp58K809PXgY6fQBXgJQ6qb -iTrimmedFastqcTxt=file-FVp58K809PXyQ3ppBJzVv5bP -iGenomeResources=file-FbJJz300xx3qbfp80v1vVKKp -iStarVersion=2.6.0a --destination=/Testing/NEW_STAR_2.6/
+
+## Run STAR/2.7.0f [default]
+dx run applet-FbJK1bj0xx3fZYyJ4q10zjFz -iTrimmedFq=file-FVp579j09v4Jx48vBXX9X381 -iTrimmedFq=file-FVp579j09v4052fFBY9P4GK2 -iTrimmedFq=file-FVp579j09v423320BYgz2Gb7 -iTrimmedFq=file-FVp579j09v4607gBBXfkzP9z -iGenome=hg19 -iRawFq=/Testing/I1.R1.fastq.gz -iRawFq=/Testing/I1.R2.fastq.gz -iRawFq=/Testing/T1.R1.fastq.gz -iRawFq=/Testing/T1.R2.fastq.gz -iTrimmedFastqcTxt=file-FVp58K809PXfzB3xBXZvJgZ7 -iTrimmedFastqcTxt=file-FVp58K809PXpx21jBZ3yYGQ4 -iTrimmedFastqcTxt=file-FVp58K809PXgY6fQBXgJQ6qb -iTrimmedFastqcTxt=file-FVp58K809PXyQ3ppBJzVv5bP -iGenomeResources=file-FbJJz300xx3qbfp80v1vVKKp -iStarVersion=2.7.0f --destination=/Testing/NEW_STAR_2.7/
+
+## Note: '-iStarVersion' is an optional command-line argument, and by default it is set to the latest version of STAR (2.7.0f).

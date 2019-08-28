@@ -1,5 +1,5 @@
 #!/bin/bash
-# ccbr_bam2rsemcounts 0.0.4
+# ccbr_bam2rsemcounts 0.0.6
 # See https://wiki.dnanexus.com/Developer-Portal for tutorials on how
 # to modify this file.
 
@@ -13,49 +13,54 @@ run_rsemcounts() {
 	dx download "$RSEMindex" -o rsemindex.tar.gz
 	cpus=`nproc`
 	tar xzvf rsemindex.tar.gz
-	
+
 	prefix="${Prefix}.RSEM"
 	outRSEMgenes="${Prefix}.RSEM.genes.results"
 	outRSEMisoforms="${Prefix}.RSEM.isoforms.results"
-	
+
 	(>&2 echo "DEBUG:Listing all files in data")
 	(>&2 tree /data)
 	(>&2 echo "Done listing")
 
 	dx-docker run -v /data/:/data kopardev/ccbr_rsem_1.3.1 rsem-calculate-expression \
-	--no-bam-output \
-	--calc-ci \
-	--seed 12345 \
-	--bam \
-	--paired-end \
-	-p $cpus \
-	$bam \
-	$Genome \
-	$prefix \
-	--time \
-	--temporary-folder /data/tmp \
-	--keep-intermediate-files
-	
+		--no-bam-output \
+		--calc-ci \
+		--seed 12345 \
+		--bam \
+		--paired-end \
+		-p $cpus \
+		$bam \
+		$Genome \
+		$prefix \
+		--time \
+		--temporary-folder /data/tmp \
+		--keep-intermediate-files
+
 	(>&2 echo "DEBUG:Listing all files in data")
 	(>&2 tree /data)
 	(>&2 echo "Done listing")
 
 	OutRSEMgenes=$(dx upload $outRSEMgenes --brief)
 	dx-jobutil-add-output OutRSEMgenes "$OutRSEMgenes" --class=file
-	
+
 	OutRSEMisoforms=$(dx upload $outRSEMisoforms --brief)
 	dx-jobutil-add-output OutRSEMisoforms "$OutRSEMisoforms" --class=file
 }
 
 main() {
+	# Printing command-line arguments
+	echo "Value of TranscriptomeBam: '${TranscriptomeBam[@]}'"
+	echo "Value of Genome: '$Genome'"
+	echo "Value of GenomeResources: $GenomeResources"
 
-    echo "Value of TranscriptomeBam: '${TranscriptomeBam[@]}'"
-    echo "Value of Genome: '$Genome'"
-    
+	# Download Reference File Mapper: genome2resources.tsv
+	genomeresources=$(dx describe "$GenomeResources" --name)
+	dx download "$GenomeResources" -o "/${genomeresources}" # download to '/'
+
 	mkdir -p /data
 	mkdir -p $HOME/out/OutRSEMisoforms
 	mkdir -p $HOME/out/OutRSEMgenes
-	
+
 	rsemindex=$(python /get_fileid.py $Genome 'rsemindex')
 	subjobids=""
 	for (( i=0; i<${#TranscriptomeBam[@]} ; i+=1 )) ; do
@@ -68,24 +73,23 @@ main() {
 		subjobids="$subjobids $process_job"
 		echo -ne "$process_job\t$outRSEMgenes\t$outRSEMisoforms\n" >> /data/lookuptable.txt
 	done
-	
+
 	while read jobid rsemgenes rsemisoforms;do
-	
-	dx wait $jobid
-	
-	cd $HOME/out/OutRSEMgenes
-	dx download $jobid:OutRSEMgenes -o $rsemgenes
-	
-	cd $HOME/out/OutRSEMisoforms
-	dx download $jobid:OutRSEMisoforms -o $rsemisoforms
-		
+
+		dx wait $jobid
+
+		cd $HOME/out/OutRSEMgenes
+		dx download $jobid:OutRSEMgenes -o $rsemgenes
+
+		cd $HOME/out/OutRSEMisoforms
+		dx download $jobid:OutRSEMisoforms -o $rsemisoforms
+
 	done < /data/lookuptable.txt
-	
+
 	(>&2 echo "DEBUG:Listing all files in out")
 	(>&2 tree $HOME/out)
 	(>&2 echo "Done listing")
 
-	dx-upload-all-outputs --parallel 
-
+	dx-upload-all-outputs --parallel
 
 }

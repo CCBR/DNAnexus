@@ -3,11 +3,11 @@
   "title": "ccbr_star",
   "summary": "STAR Alignmnet: One-pass mode",
   "dxapi": "1.0.0",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "inputSpec": [
     {
       "name": "RawFq",
-      "label": "RawFq",
+      "label": "Input FastQ File",
       "help": "",
       "class": "array:file",
       "patterns": ["*.fastq.gz", "*.fastq"],
@@ -15,7 +15,7 @@
     },
     {
       "name": "TrimmedFq",
-      "label": "TrimmedFq",
+      "label": "FastQ File after removing adapter sequences",
       "help": "",
       "class": "array:file",
       "patterns": ["*.trimmed.fastq.gz"],
@@ -23,18 +23,35 @@
     },
     {
       "name": "TrimmedFastqcTxt",
-      "label": "TrimmedFastqcTxt",
+      "label": "FastQC data after adapter removal",
       "help": "",
       "class": "array:file",
       "patterns": ["*_fastqc_data.txt"],
       "optional": false
     },
     {
+      "name": "GenomeResources",
+      "label": "Reference Files for each Genome",
+      "help": "Genomic Resource file: 'genome2resources.tsv'",
+      "class": "file",
+      "patterns": ["*.tsv"],
+      "optional": false
+    },
+    {
       "name": "Genome",
-      "label": "hg19 or hg38 or hg38_HPV16 or mm9 or mm10 or hg19_KSHV or Mmul_8.0.1",
-      "help": "",
+      "label": "Reference Genome: hg19 or hg38 or hg38_HPV16 or mm9 or mm10 or hg19_KSHV or Mmul_8.0.1",
+      "help": "Reference genome used for alignment",
       "class": "string",
       "optional": false
+    },
+    {
+      "name": "StarVersion",
+      "label": "Version of STAR to use for alignment: '2.6.0a' or '2.7.0f'",
+      "help": "Version of STAR to Run: '2.6.0a' or '2.7.0f'. Optional Argument. Default is set to latest verison: '2.7.0f'.",
+      "class": "string",
+      "optional": true,
+      "default": "2.7.0f",
+      "choices": ["2.6.0a", "2.7.0f"]
     }
   ],
   "outputSpec": [

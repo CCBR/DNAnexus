@@ -1,0 +1,2 @@
+# Example Commad for testing:
+dx run ccbr_rsem_merge/0.0.3 -iGeneResults=file-FbJV3180kV33QGFG23JXkQGj -iGeneResults=file-FbJV3180kV3JYBJGPz8xVzZ6 -iIsoformResults=file-FbJV3180kV3KQ0X823zFqjBB    -iIsoformResults=file-FbJV3180kV3KP67VPyyj0527 -iGenome=hg19 -iGenomeResources=file-FbJJz300xx3qbfp80v1vVKKp --destination=/Testing/NEW_STAR_2.6/
