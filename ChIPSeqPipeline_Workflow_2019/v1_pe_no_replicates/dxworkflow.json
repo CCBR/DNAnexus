@@ -267,6 +267,52 @@
       }
     },
     {
+      "id": "stage-UROPANARROW",
+      "executable": "app-ccbr_uropa/0.0.1",
+      "folder":"peaks_narrow",
+      "input":{
+        "Genome2Resources": {
+        "$dnanexus_link": {
+          "workflowInputField": "Genome2Resources"
+          }
+        },
+        "Genome" : {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome"
+          }
+        },
+        "PeakBedFile": {
+          "$dnanexus_link": {
+            "outputField": "PeakBed",
+            "stage": "stage-NARROWPEAKCALLINGREP1"
+          }
+        }        
+      }      
+    },
+    {
+      "id": "stage-UROPABROAD",
+      "executable": "app-ccbr_uropa/0.0.1",
+      "folder":"peaks_broad",
+      "input":{
+        "Genome2Resources": {
+        "$dnanexus_link": {
+          "workflowInputField": "Genome2Resources"
+          }
+        },
+        "Genome" : {
+          "$dnanexus_link": {
+            "workflowInputField": "Genome"
+          }
+        },
+        "PeakBedFile": {
+          "$dnanexus_link": {
+            "outputField": "PeakBed",
+            "stage": "stage-BROADPEAKCALLINGREP1"
+          }
+        }        
+      }      
+    },
+    {
       "id": "stage-MULTIQC",
       "executable": "app-ccbr_multiqc/0.0.1",
       "folder":"multiqc",
