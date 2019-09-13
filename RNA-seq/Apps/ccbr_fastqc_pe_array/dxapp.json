@@ -1,6 +1,6 @@
 {
-  "name": "ccbr_fastqc_pe_array_pe_array",
-  "title": "ccbr_fastqc_pe_array_pe_array",
+  "name": "ccbr_fastqc_pe_array",
+  "title": "ccbr_fastqc_pe_array",
   "summary": "Run fastqc on an array of fastq files in parallel",
   "dxapi": "1.0.0",
   "version": "0.0.1",
