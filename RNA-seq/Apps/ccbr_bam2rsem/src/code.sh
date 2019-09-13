@@ -14,6 +14,10 @@ run_rsemcounts() {
 	cpus=`nproc`
 	tar xzvf rsemindex.tar.gz
 
+	# Get RSEM Reference files prefix, since some reference genomes point to rsem reference built with different prefix names
+	genome_prefix=$(tar -tf rsemindex.tar.gz | grep '.chrlist$' | sed 's/.chrlist//g')
+	echo -e "Value of $Genome and $genome_prefix"
+
 	prefix="${Prefix}.RSEM"
 	outRSEMgenes="${Prefix}.RSEM.genes.results"
 	outRSEMisoforms="${Prefix}.RSEM.isoforms.results"
@@ -30,7 +34,7 @@ run_rsemcounts() {
 		--paired-end \
 		-p $cpus \
 		$bam \
-		$Genome \
+		$genome_prefix \
 		$prefix \
 		--time \
 		--temporary-folder /data/tmp \
