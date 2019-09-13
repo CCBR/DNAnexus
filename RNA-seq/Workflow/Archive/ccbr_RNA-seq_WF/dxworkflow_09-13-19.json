@@ -40,7 +40,7 @@
   "stages": [
     {
       "id": "rawfastqc",
-      "executable": "app-ccbr_fastqc_pe_array/0.0.1",
+      "executable": "app-ccbr_fastqc_array/0.0.1",
       "folder": "rawQC",
       "input": {
         "InFq": {
@@ -64,7 +64,7 @@
     },
     {
       "id": "fastqc",
-      "executable": "app-ccbr_fastqc_pe_array/0.0.1",
+      "executable": "app-ccbr_fastqc_array/0.0.1",
       "folder": "QC",
       "input": {
         "InFq": [
@@ -213,7 +213,7 @@
     },
     {
       "id": "multiqc",
-      "executable": "app-ccbr_rnaseq_multiqc_report/0.0.3",
+      "executable": "app-ccbr_rnaseq_multiqc_report/0.0.2",
       "folder": "report",
       "input": {
         "STAR_final_out_files": [
@@ -227,7 +227,7 @@
         "RawFastQC_files": [
           {
             "$dnanexus_link": {
-              "outputField": "OutZip",
+              "outputField": "OutTxt",
               "stage": "rawfastqc"
             }
           }
@@ -259,7 +259,7 @@
         "FastQC_files": [
           {
             "$dnanexus_link": {
-              "outputField": "OutZip",
+              "outputField": "OutTxt",
               "stage": "fastqc"
             }
           }
