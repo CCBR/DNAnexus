@@ -155,7 +155,7 @@
     },
     {
       "id": "rsem",
-      "executable": "app-ccbr_bam2rsem/0.0.6",
+      "executable": "app-ccbr_bam2rsem/0.0.7",
       "folder": "rsem",
       "input": {
         "Genome": {
@@ -213,7 +213,7 @@
     },
     {
       "id": "multiqc",
-      "executable": "app-ccbr_rnaseq_multiqc_report/0.0.3",
+      "executable": "app-ccbr_rnaseq_multiqc_report/0.0.4",
       "folder": "report",
       "input": {
         "STAR_final_out_files": [
