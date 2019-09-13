@@ -3,7 +3,7 @@
   "title": "ccbr_bam2rsem",
   "summary": "Use RSEM to count genes and isoforms",
   "dxapi": "1.0.0",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "inputSpec": [
     {
       "name": "TranscriptomeBam",
