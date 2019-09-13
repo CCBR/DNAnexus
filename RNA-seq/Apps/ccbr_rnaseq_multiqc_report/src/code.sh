@@ -43,8 +43,8 @@ main() {
     # Creating Symlinks from $HOME/in to similar directory structure on Biowulf
     find /home/dnanexus/in/ -type f -iname '*_db1_screen.txt' -exec ln -s {} /data/FQscreen/ \;
     find /home/dnanexus/in/ -type f -iname '*_db2_screen.txt' -exec ln -s {} /data/FQscreen2/ \;
-    find /home/dnanexus/in/ -type f -iname '*.R?_fastqc_data.txt' -exec ln -s {} /data/rawQC/ \;
-    find /home/dnanexus/in/ -type f -iname '*.trimmed_fastqc_data.txt' -exec ln -s {} /data/QC/ \;
+    find /home/dnanexus/in/ -type f -iname '*.R?_fastqc.zip' -exec ln -s {} /data/rawQC/ \;
+    find /home/dnanexus/in/ -type f -iname '*.trimmed_fastqc.zip' -exec ln -s {} /data/QC/ \;
     find /home/dnanexus/in/ -type f -iname '*.RnaSeqMetrics.txt' -exec ln -s {} /data/logfiles/ \;
     find /home/dnanexus/in/ -type f -iname '*.star.duplic' -exec ln -s {} /data/logfiles/ \;
     find /home/dnanexus/in/ -type f -iname '*.Log.final.out' -exec ln -s {} /data/logfiles/ \;
