@@ -1,5 +1,5 @@
 <!-- dx-header -->
-# ccbr_fastqc_array (DNAnexus Platform App)
+# ccbr_fastqc_pe_array (DNAnexus Platform App)
 
 Run fastqc on an array of fastq files in parallel
 
