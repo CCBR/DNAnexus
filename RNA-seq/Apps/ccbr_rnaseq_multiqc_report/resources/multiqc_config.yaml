@@ -12,7 +12,6 @@ module_order:
     - 'fastq_screen'
     - 'fastqc':
         name: 'FastQC'
-        anchor: 'before_after'
         info: 'This section of the report shows FastQC results before and after adapter trimming.'
         path_filters:
             - '*_fastqc.zip' 
@@ -68,5 +67,6 @@ extra_fn_clean_exts:
 
 
 section_comments:
-    fastq_screen: "**Interpretation Checkpoint:** Are most of your reads aligning to what you expected? During the process of sample collection to library preparation, there is a risk for introducing wanted sources of DNA. FastQ Screen compares your sequencing data to a set of different genomes or databases to determine if there is contamination."
+    fastq_screen: "**Interpretation Checkpoint:** Are most of your reads aligning to what you expected? During the process of sample collection to library preparation, there is a risk for introducing unwanted sources of RNA. FastQ Screen compares your sequencing data to a set of different genomes or databases to determine if there is contamination."
     picard-rna-assignment: "**Interpretation Checkpoint:** Compared to libraries constructed through poly-(A) selection, total RNA libraries will have a lower percentage of reads mapping to coding regions. Do you see any outliers?<br><ul><li><b>mRNA enriched libraries</b><br><code>% Coding</code> > 50%<br><code>% Intronic + Intergenic</code> < 25%</li><li><b>total RNA libraries</b><br><code>% Coding</code> > 35%<br><code>% Intronic + Intergenic</code> < 40%</li></ul>"
+    picard-rna-coverage: "**Interpretation Checkpoint:** Is coverage uniform across all genes? Do you see any samples with 5' or 3' bias?<br>**Note**: 3' bias is usually observed in samples with low RNA integrity values (`RIN < 8`)."
