@@ -40,7 +40,7 @@ Inputs:
 
   Reference Files for each Genome: -iReferenceFiles=(file)
         Genomic Resource file: 'genome2resources.tsv':
-            See Example (file-FbJJz300xx3qbfp80v1vVKKp)
+            See Example (file-Fjvv3100xx3f7J4p7fKFz907)
 
   Version of STAR to use for alignment: '2.6.0a' or '2.7.0f' [default]: [-iStarVersion=(string, default="2.7.0f")]
         Choices: 2.6.0a, 2.7.0f
@@ -54,7 +54,7 @@ Inputs:
                    hg38, hg38_v28, hg19,
                    hg38_HPV16, hg19_KSHV,
                    hs38d1, hs37d5, Mmul_8.0.1]
-	Note: mm10 was built using M21 GENCODE annotations and hg38 was built using version 30 GENCODE annotations.
+	Note: mm10 was built using M21 GENCODE annotations and hg38 and hg38_HPV16 were built using version 30 GENCODE annotations.
 
 ```
 
@@ -75,13 +75,14 @@ dx upload treatment_1.R1.fastq.gz --destination=/Testing/
 dx upload treatment_1.R2.fastq.gz --destination=/Testing/
 
 # Run the RNA-seq Pipeline
-## Supports mm9, mm10, hg38, hg38_HPV16, hg19, hg19_KSHV, hs38d1, hs37d5, Mmul_8.0.1
+## Supports mm9, mm10 (M21), hg38 (v30), hg38_HPV16 (v30), hg19, hg19_KSHV, hs38d1, hs37d5, Mmul_8.0.1
 echo "Y n" | dx run /Workflow/ccbr_RNA-seq_WF \
   -iFastqFiles=/Testing/control_1.R1.fastq.gz \
   -iFastqFiles=/Testing/control_1.R2.fastq.gz \
   -iFastqFiles=/Testing/treatment_1.R1.fastq.gz \
   -iFastqFiles=/Testing/treatment_1.R2.fastq.gz \
   -iRefGenome=hg19 \
+  -iReferenceFiles=file-Fjvv3100xx3f7J4p7fKFz907 \
   --destination=/Testing/Example/ \
   --priority=high
 ```
