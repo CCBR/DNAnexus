@@ -1,14 +1,14 @@
-# CCBR DNAnexus Workflows
+# DNAnexus Workflows
 
-<img src="assets/CCBR_LOGO.png" width="415" height="110">
+<img src="assets/CCBR_LOGO.png" width="311" height="82">
+
+This repository provides access to a set of pipelines developed by CCBR members to analyze NGS data on DNAnexus. They allow a user to process raw data starting from FastQ files to reach common endpoints for downstream analysis such as a list of annotated mutations, a set of annotated peaks, or a raw counts matrix for differential expression analysis.
 
 ## Table of Contents
 > 1. **[RNA-seq](#1-RNA-seq)**
 > 2. **[ChIP-seq](#2-ChIP-seq)**
 > 3. **[DNA-seq](#3-DNA-seq)**
 
-##### Description:
-These workflows provides access to some of the NGS pipelines used and developed by CCBR on Biowulf. They allow the user to select a set of fastq files, and process them on DNAnexus platform to reach an endpoint, such as a list of mutations with accompanying annotations, a set of annotated peaks, or a raw counts matrix.  
 
 ## 1. RNA-seq
 Overview of the RNA-seq pipeline:
@@ -91,7 +91,64 @@ For more detailed documentation about RNA-seq and the pipeline, please checkout 
 
 ## 2. ChIP-seq
 ##### Description:
-Under Constuction: *Coming Soon!*
+#### Running the ChIP-seq Workflow on DNAnexus
+Step 0.) Log into DNAnexus
+```bash 
+module load DNAnexus # module is available from helix/biowulf
+ 
+dx login # optional step (if you have not logged in the last 30 days)
+         # prompt will ask for Username and Password
+```
+
+Step 1.) Upload data to DNAnexus
+```bash 
+# Assumes your FastQ files exists in your present working directory on biowulf/helix
+# In this example, we will be uploading the data to a directory called /Testing/tmp/ on DNAnexus
+# The directory must exist on DNAnexus prior to uploading data
+# Here is the command to create a new directory:
+dx mkdir /Testing/tmp/
+
+# Upload files 
+dx upload input_rep1.R1.fastq.gz --destination=/Testing/tmp/
+dx upload treatment_rep1.R1.fastq.gz --destination=/Testing/tmp/
+dx upload input_rep2.R1.fastq.gz --destination=/Testing/tmp/
+dx upload treatment_rep2.R1.fastq.gz --destination=/Testing/tmp/
+
+# Optional: If you want to take a peek at the data you just uploaded, you could run something like this:  
+dx ls -la /Testing/tmp/
+
+# To see all the dx commands available and get more info about them run:
+dx help all
+```
+
+At the current moment, there are two ChIP-seq workflows on DNAnexus: 
+1. `ccbr_chipseq_pipeline_single_end_two_replicates`
+2. `ccbr_chipseq_pipeline_single_end_no_replicates`
+
+In this example, we will walk through how to run the `ccbr_chipseq_pipeline_single_end_two_replicates` workflow, but keep in mind, the process is very similar for the no replicates workflow.
+ 
+**Note:**
+Both of these workflows support the following reference genomes: `mm9`, `mm10`, `hg19`, `hg38`.  
+The `–-destination` argument is the pipeline’s output directory on DNAnexus (if this directory does not exist, it will created it). Please make sure you filenames end with “.R1.fastq.gz” ~ similar to Pipeliner.
+
+To get more information about any pipeline, you can run the following: `dx run pipelinename -h`   
+```bash 
+#Example: 
+dx run ccbr_chipseq_pipeline_single_end_two_replicates -h
+```
+Step 2.) Run the `ccbr_chipseq_pipeline_single_end_two_replicates` pipeline on DNAnexus
+``` bash
+## Pipeline supports mm9, mm10, hg38, hg19
+echo "Y n" | dx run ccbr_chipseq_pipeline_single_end_two_replicates \
+  -iInputFastqRep1=/Testing/tmp/input_rep1.R1.fastq.gz \
+  -iTreatmentFastqRep1=/Testing/tmp/treatment_rep1.R1.fastq.gz \
+  -iInputFastqRep2=/Testing/tmp/input_rep2.R1.fastq.gz \
+  -iTreatmentFastqRep2=/Testing/tmp/treatment_rep2.R1.fastq.gz \
+  -iGenome=mm9 \
+  -iGenome2Resources= file-FXbpk100vbJF4qX02FV3F6K2 \
+  --destination=/Testing/tmp/Test_SE_2R_mm9/ \
+  --priority=high
+ ```
 
 ## 3. DNA-seq
 ##### Description:
@@ -102,5 +159,5 @@ Under Constuction: *Coming Soon!*
 <hr>
 
 <p align="center">
-	<a href="#ccbr-dnanexus-workflows">Back to Top</a>
+	<a href="#dnanexus-workflows">Back to Top</a>
 </p>
