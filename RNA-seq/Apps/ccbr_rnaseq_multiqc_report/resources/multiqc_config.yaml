@@ -1,0 +1,72 @@
+# Order that modules should appear in report. Try to list in order of analysis,
+# eg. FastQC is usually the first step, so should be last in this list
+# USAGE: multiqc -f -c multiqc_config.yaml --interactive  -d .  -n multiqc_report.html
+
+custom_logo: '/data/CCBR_LOGO.png'
+report_comment: "<b>Interpretation Checkpoint:</b> Before analyzing the data to draw biological conclusions, it is important to assess the quality of your data. This section summarizes a different quality-control metrics across all your samples.<br><b>Generalized Guidelines:</b><ul><li><b>mRNA enriched libraries:</b> generated through poly(A)-selection<br><code>% Aligned</code> > 70% with at least 14M reads aligned<br><code>% rRNA</code> < 2.0% with the vast majority of reads aligning to mRNA</li><li><b>total RNA libraries:</b> generated through rRNA depletion<br><code>% Aligned</code> > 65% with at least 33M reads aligned<br><code>% rRNA</code> < 5.0% with the vast majority of reads aligning to mRNA</li></ul><b>Note:</b> Some metrics will vary genome-to-genome depending on the size of the genome and the quality of the genome's assembly and annotation."
+
+fastqscreen_simpleplot: true
+
+module_order:
+# Pre-alignment QC
+    - 'fastq_screen'
+    - 'fastqc':
+        name: 'FastQC'
+        info: 'This section of the report shows FastQC results before and after adapter trimming.'
+        path_filters:
+            - '*_fastqc.zip' 
+    - 'cutadapt'
+    #- 'fastqc':
+    #    name: 'FastQC (trimmed data)'
+    #    anchor: 'after'
+    #    info: 'This section of the report shows FastQC results after adapter trimming.'
+    #    path_filters: 
+    #        - '*.trim_fastqc.zip'
+    - 'trimmomatic'
+# Alignment tool stats
+    - 'salmon'
+    - 'kallisto'
+    - 'star'
+    - 'tophat'
+    - 'bowtie2'
+    - 'bowtie1'
+# Post-alignment analysis results
+    - 'preseq'
+    - 'rsem'
+    - 'qualimap':
+        path_filters:
+            - insert_size_histogram.txt
+    - 'featureCounts'
+    - 'rseqc'
+    - 'picard'
+    - 'samblaster'
+    - 'samtools'
+    - 'bamtools'
+
+extra_fn_clean_exts:
+    - type: regex
+      pattern: 'QualiMap \| \w.* |'
+    - type: regex
+      pattern: 'DEG_ALL \| \w.* |'
+    - type: regex
+      pattern: 'STAR_files \|'
+    - type: regex
+      pattern: 'logfiles \|'
+    - type: remove
+      pattern: '.star_rg_added'
+    - type: remove
+      pattern: '.RSEM'
+    - type: remove
+      pattern: '.p2'
+    - type: remove
+      pattern: '.RG'
+    - type: remove
+      pattern: '.dmark'
+    - type: remove
+      pattern: '.p1'
+
+
+section_comments:
+    fastq_screen: "**Interpretation Checkpoint:** Are most of your reads aligning to what you expected? During the process of sample collection to library preparation, there is a risk for introducing unwanted sources of RNA. FastQ Screen compares your sequencing data to a set of different genomes or databases to determine if there is contamination."
+    picard-rna-assignment: "**Interpretation Checkpoint:** Compared to libraries constructed through poly-(A) selection, total RNA libraries will have a lower percentage of reads mapping to coding regions. Do you see any outliers?<br><ul><li><b>mRNA enriched libraries</b><br><code>% Coding</code> > 50%<br><code>% Intronic + Intergenic</code> < 25%</li><li><b>total RNA libraries</b><br><code>% Coding</code> > 35%<br><code>% Intronic + Intergenic</code> < 40%</li></ul>"
+    picard-rna-coverage: "**Interpretation Checkpoint:** Is coverage uniform across all genes? Do you see any samples with 5' or 3' bias?<br>**Note**: 3' bias is usually observed in samples with low RNA integrity values (`RIN < 8`)."

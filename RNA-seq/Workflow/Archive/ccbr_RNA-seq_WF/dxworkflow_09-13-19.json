@@ -14,7 +14,7 @@
     {
       "name": "ReferenceFiles",
       "label": "Reference Files for each Genome",
-      "help": "Genomic Resource file: 'genome2resources.tsv': see example (file-Fjvv3100xx3f7J4p7fKFz907)",
+      "help": "Genomic Resource file: 'genome2resources.tsv': see example (file-FbJJz300xx3qbfp80v1vVKKp)",
       "class": "file",
       "patterns": ["*.tsv"],
       "optional": false
@@ -29,7 +29,7 @@
       "choices": ["2.6.0a", "2.7.0f"]
     },
     {
-      "help": "Needed for dynamically resolving the correct reference files. Please choose from one of the following: [mm9, mm10, mm10_M18, hg38, hg38_v28, hg38_HPV16 (v30), hg19, hg19_KSHV, hs38d1, hs37d5, Mmul_8.0.1]",
+      "help": "Needed for dynamically resolving the correct reference files. Please choose from one of the following: [mm9, mm10, mm10_M18, hg38, hg38_v28, hg38_HPV16, hg19, hg19_KSHV, hs38d1, hs37d5, Mmul_8.0.1]",
       "label": "Reference Genome",
       "patterns": ["hg19", "hg19_KSHV", "hg38", "hg38_HPV16", "mm9", "mm10", "Mmul_8.0.1", "mm10_M18", "hg38_v28"],
       "optional": false,
@@ -40,7 +40,7 @@
   "stages": [
     {
       "id": "rawfastqc",
-      "executable": "app-ccbr_fastqc_pe_array/0.0.1",
+      "executable": "app-ccbr_fastqc_array/0.0.1",
       "folder": "rawQC",
       "input": {
         "InFq": {
@@ -64,7 +64,7 @@
     },
     {
       "id": "fastqc",
-      "executable": "app-ccbr_fastqc_pe_array/0.0.1",
+      "executable": "app-ccbr_fastqc_array/0.0.1",
       "folder": "QC",
       "input": {
         "InFq": [
@@ -155,7 +155,7 @@
     },
     {
       "id": "rsem",
-      "executable": "app-ccbr_bam2rsem/0.0.7",
+      "executable": "app-ccbr_bam2rsem/0.0.6",
       "folder": "rsem",
       "input": {
         "Genome": {
@@ -213,7 +213,7 @@
     },
     {
       "id": "multiqc",
-      "executable": "app-ccbr_rnaseq_multiqc_report/0.0.5",
+      "executable": "app-ccbr_rnaseq_multiqc_report/0.0.2",
       "folder": "report",
       "input": {
         "STAR_final_out_files": [
@@ -227,7 +227,7 @@
         "RawFastQC_files": [
           {
             "$dnanexus_link": {
-              "outputField": "OutZip",
+              "outputField": "OutTxt",
               "stage": "rawfastqc"
             }
           }
@@ -259,7 +259,7 @@
         "FastQC_files": [
           {
             "$dnanexus_link": {
-              "outputField": "OutZip",
+              "outputField": "OutTxt",
               "stage": "fastqc"
             }
           }

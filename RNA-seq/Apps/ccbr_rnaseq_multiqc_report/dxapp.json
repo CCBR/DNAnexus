@@ -3,7 +3,7 @@
   "title": "ccbr_rnaseq_multiqc_report",
   "summary": "CCBR RNASeq Multiqc",
   "dxapi": "1.0.0",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "inputSpec": [
     {
       "name": "FastQC_files",

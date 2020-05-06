@@ -1,4 +1,4 @@
-# ccbr_fastqc_array Developer Readme
+# ccbr_fastqc_pe_array Developer Readme
 
 <!--
 TODO: Please edit this Readme.developer.md file to include information

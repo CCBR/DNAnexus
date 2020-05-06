@@ -1,6 +1,6 @@
 {
-  "name": "ccbr_fastqc_array",
-  "title": "ccbr_fastqc_array",
+  "name": "ccbr_fastqc_pe_array",
+  "title": "ccbr_fastqc_pe_array",
   "summary": "Run fastqc on an array of fastq files in parallel",
   "dxapi": "1.0.0",
   "version": "0.0.1",
@@ -28,6 +28,13 @@
       "help": "",
       "class": "array:file",
       "patterns": ["*_fastqc_data.txt"]
+    },
+    {
+      "name": "OutZip",
+      "label": "OutZip",
+      "help": "",
+      "class": "array:file",
+      "patterns": ["*_fastqc.zip"]
     }
   ],
   "runSpec": {
@@ -41,7 +48,7 @@
     "interpreter": "bash",
     "timeoutPolicy": {
       "*": {
-        "hours": 48
+        "hours": 10
       }
     },
     "distribution": "Ubuntu"
