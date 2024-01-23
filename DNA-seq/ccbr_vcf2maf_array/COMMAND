@@ -1,5 +1,0 @@
-# Example usage of a Single TN-pair: 
-dx run ccbr_vcf2maf_array -iGenomeName=hg38 -iTumorID=Sample_69B_S69 -iNormalID=Sample_69A_S35 -iVCF=/ExomeSeqTesting/Sample_69B_S69+Sample_69A_S35.FINALmutect2.vcf -iGenome2Resources=/Workflows/ExomeSeq/Resources/genome2resources.tsv --destination=/Testing/MAF/
-
-# Example usage of an array of TN-pairs:
-dx run ccbr_vcf2maf_array -iGenomeName=hg38 -iTumorID=Sample_69B_S69 -iTumorID=Sample_46B_S46 -iNormalID=Sample_69A_S35 -iNormalID=Sample_46A_S10 -iVCF=/ExomeSeqTesting/Sample_69B_S69+Sample_69A_S35.FINALmutect2.vcf -iVCF=/ExomeSeqTesting/Sample_46B_S46+Sample_46A_S10.FINALmutect2.vcf -iGenome2Resources=/Workflows/ExomeSeq/Resources/genome2resources.tsv --destination=/Testing/MAF/
